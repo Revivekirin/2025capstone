@@ -10,4 +10,6 @@ RUN npm install playwright@1.51.1
 
 COPY . .
 
-CMD ["node", "crawl.js"]
+#기본설정 파일은 crawl_gbhackers.js
+CMD ["bash", "-c", "node crawl_security_affairs.js && sleep infinity"]
+

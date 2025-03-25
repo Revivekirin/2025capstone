@@ -1,0 +1,53 @@
+제목: Ukrainian Cyber Alliance destroyed the connectivity of Russian ISP Nodex
+URL: https://securityaffairs.com/172864/hacktivism/ukrainian-cyber-alliance-destroyed-russian-isp-nodex.html
+
+UKRAINIAN CYBER ALLIANCE DESTROYED THE CONNECTIVITY OF RUSSIAN ISP NODEX
+Pierluigi Paganini
+ 
+January 09, 2025
+A group of hacktivists, known as the Ukrainian Cyber Alliance, breached Russian ISP Nodex, stole sensitive documents, and wiped systems.
+
+Ukrainian Cyber Alliance hacked Russian ISP Nodex, stole sensitive data, and wiped systems, highlighting their cyberattack capabilities.
+
+The Ukrainian Cyber Alliance has been active since 2016, the Pro-Ukraine group has targeted Russian entities since the invasion of Ukraine.
+
+The group published a series of screenshots as proof of the security breach. The images include the consoles of the Veeam backup and Hewlett Packard Enterprise server.
+
+The Russian ISP Nodex confirmed the attack on its infrastructure and speculated the involvement of Russia-linked threat actors.
+
+“Dear subscribers! There was a planned attack on the network infrastructure at night (presumably from Ukraine). The network has been destroyed. We are raising it from backup copies. There are no deadlines or forecasts. First, we will raise the telephony and call center.” reads a message published by the Russian ISP on VKontakte.
+
+Internet monitoring service NetBlocks confirmed a disruption in Nodex’s connectivity following the attack on Tuesday night.
+
+ℹ️ Confirmed: Metrics show that connectivity has collapsed on Russian internet operator Nodex, as the company reports a cyberattack from Ukraine resulting the destruction of its networks; the incident affecting fixed-line and mobile services is ongoing 📉 pic.twitter.com/wY6ZCJV4h3
+
+— NetBlocks (@netblocks) January 7, 2025
+
+Following the cyber attack, the Russian ISP published a series of updates. The company announced that it had restored its network, however its website is unreacheable at the time of this writing.
+
+“Dear Subscribers, the network core has been restored, and the planned configuration of the reset switches is in progress, after which the connection will be restored.” reads an update published by the company.
+
+“At the moment the dhcp server has been raised. Internet should work for many. Please reboot your routers.” continues the Russian ISP.
+
+“The attack on Nodex is one in a series of recent cyber incidents against Russia claimed by a Ukrainian group. Earlier in January, cyber specialists from Ukraine’s military intelligence (HUR) said they attacked the Russian railway system operator, destroying its servers, disabling workstations and wiping backups.” reported The Record Media.
+
+Follow me on Twitter: @securityaffairs and Facebook and Mastodon
+
+Pierluigi Paganini
+
+(SecurityAffairs – hacking, Ukraine)
+
+FACEBOOK 
+LINKEDIN 
+TWITTER
+Hacking
+hacking news
+information security news
+IT Information Security
+Nodex
+Pierluigi Paganini
+Russia
+Security Affairs
+Security News
+Ukraine
+Ukrainian Cyber Alliance

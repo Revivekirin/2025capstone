@@ -14,7 +14,16 @@ After launching **Docker Desktop**, run the following commands in your terminal:
 docker build -t playwright-crawler .
 
 # Run the container with your desired keyword
-docker run --rm -e KEYWORD=babuk -v $(pwd)/downloads:/app/downloads playwright-crawler
+#docker run --rm -e KEYWORD=babuk -v $(pwd)/downloads:/app/downloads playwright-crawler
+# gbhackers
+docker run --rm -e KEYWORD=babuk -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_gbhackers.js
+
+# security affairs
+docker run --rm -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_security_affairs.js
+
+# ransomwatch
+docker run --rm -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_ransomwatch.js
+
 ```
 
 KEYWORD should be the name of a ransomware group (e.g., `babuk`, `lockbit`, etc.)

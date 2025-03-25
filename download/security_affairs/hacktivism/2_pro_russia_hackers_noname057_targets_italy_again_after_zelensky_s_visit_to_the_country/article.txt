@@ -1,0 +1,59 @@
+제목: Pro-Russia hackers NoName057 targets Italy again after Zelensky’s visit to the country
+URL: https://securityaffairs.com/172982/hacktivism/noname057-targets-italy.html
+
+PRO-RUSSIA HACKERS NONAME057 TARGETS ITALY AGAIN AFTER ZELENSKY’S VISIT TO THE COUNTRY
+Pierluigi Paganini
+ 
+January 12, 2025
+Over the weekend, Italy faced new waves of DDoS attacks carried out by pro-Russia group NoName057(16).
+
+Pro-Russia hackers Noname057(16) targeted Italian ministries, institutions, critical infrastructure’s websites and private organizations over the weekend. The new wave of attacks coincides with the visit of Ukrainian President Volodymyr Zelensky to Italy.
+
+The group claimed responsibility for the attacks on its Telegram channel, below is the message published by NoName:
+
+“Italian Prime Minister Giorgia Meloni reaffirmed Italy’s commitment to comprehensive support for Ukraine during her meeting with Volodymyr Zelensky on his visit to Rome, the Chigi Palace announced. Meloni stated that Italy would assist Ukraine in defending its interests and achieving a just and lasting peace. The talks, which lasted about an hour, aimed to strengthen Kyiv’s position.
+
+Italy should start helping itself, especially in the area of its own cybersecurity.”
+
+On Saturday, January 11, the attacks targeted Italian ministries and government institutions, while on Sunday a new wave of DDoS attacks hit Italian banks and private businesses.
+
+The attacks carried out by the hacktivists are not a novelty in the threat landscape and cause some disruptions and temporary service interruptions.
+
+The experts at the National Cybersecurity Agency (ACN) supported the impacted organizations in mitigating the attacks and restoring functionality.
+
+The list of targets is long and includes the Ministry of Foreign Affairs, the Ministry Infrastructure and Transport, Italy’s financial markets regulator Consob, the Air Force, the Navy, the Carabinieri and local public transport companies, including Rome’s Atac, and Genoa’s Amt.
+
+Noname057(16) hackers also hit Italian banks, including Intesa, Monte Paschi di Siena, and Italian ports of the cities of Taranto and Trieste. The Pro-Russia hacktivists also targeted private organizations, including Vulcanair and Olidata.
+
+At the end of December, Pro-Russia group NoName057 targeted several Italian web sites, including Malpensa and Linate airports, in a new DDoS campaign amid rising geopolitical tensions.
+
+The group NoName57 has been active since March 2022 and has targeted government and critical infrastructure organizations worldwide.
+
+NoName057(16) uses multiple tools to carry out their attacks. In September 2022, Avast researchers observed the group using the Bobik botnet to launch DDoS attacks.
+
+They operate in waves, escalating attacks during geopolitical tensions, such as increased military or diplomatic support for Ukraine by other nations.
+
+The timing of these attacks, coinciding with the Christmas holidays, is strategic. Threat actors often plan their operations around periods when organizations are likely to have reduced staff and slower response times, such as holidays or weekends. During these times, critical teams like IT support, cybersecurity, and incident response may be operating at minimal capacity, making it harder to detect, mitigate, and recover from an attack promptly.
+
+
+Follow me on Twitter: @securityaffairs and Facebook and Mastodon
+
+Pierluigi Paganini
+
+(SecurityAffairs – hacking, DDoS)
+
+FACEBOOK 
+LINKEDIN 
+TWITTER
+DDoS
+Hacking
+hacking news
+hacktivists
+information security news
+IT Information Security
+Italy
+NoName057
+Pierluigi Paganini
+Russia
+Security Affairs
+Security News

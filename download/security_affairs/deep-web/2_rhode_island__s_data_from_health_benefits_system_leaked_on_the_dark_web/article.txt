@@ -1,0 +1,52 @@
+제목: Rhode Island ’s data from health benefits system leaked on the dark web
+URL: https://securityaffairs.com/172503/cyber-crime/rhode-island-data-breach.html
+
+RHODE ISLAND ’S DATA FROM HEALTH BENEFITS SYSTEM LEAKED ON THE DARK WEB
+Pierluigi Paganini
+ 
+December 31, 2024
+Rhode Island ’s health benefits system was hacked, and threat actors leaked residents’ data on the dark web.
+
+Cybercriminals leaked data stolen from Rhode Island ‘s health benefits system on the dark web. Gov. Daniel McKee stated the state had prepared for this and is informing impacted individuals.
+
+RIBridges supports state programs like Medicaid, SNAP, Rhode Island Works, childcare assistance, long-term care, and HealthSource RI insurance.
+
+Rhode Island is encouraging residents to safeguard their data after a breach. It’s unclear which files stolen from RIBridges have been posted on the dark web.
+
+“Right now, IT teams are working diligently to analyze the released files. This is a complex process and we do not yet know the scope of the data that is included in those files,” according to a statement from McKee’s office that was reported by the Associated Press.
+
+Deloitte, which designed and maintains the RIBridges system, has been in contact with the group that stole the data, McKee said.
+
+The consultant firm is investigating the security breach to determine the impacted individuals and notify them. Letters will be sent to those individuals with instructions on how to access free credit monitoring.
+
+“Unfortunately, Deloitte has informed us that the cybercriminal released at least some RIBridges files to a site on the dark web. This is a scenario that the State has been preparing for, which is why earlier this month we launched a statewide outreach strategy to encourage potentially impacted Rhode Islanders to protect their personal information. Right now, IT teams are working diligently to analyze the released files. This is a complex process and we do not yet know the scope of the data that is included in those files, but as we’ve been saying for several weeks, we should assume that data contained in the RIBridges system has been compromised.” Governor McKee told the press.
+
+McKee pointed out that even if the data has been stolen, it does not mean it has been used for malicious purposes, such as identity theft.
+
+“While this data has been compromised, that does not mean it has been used for identity theft purposes—yet. That is why we urge Rhode Islanders to take these five simple steps to protect your financial information now.” continues the statement.
+
+Rhode Islanders are encouraged to take immediate steps to protect their financial information. Freezing theur credit with all three credit reporting agencies is recommended, as this prevents anyone from taking out a loan or establishing credit in their name while still allowing them access to their money and credit cards. Guardians of minors who have received benefits or services should also freeze and monitor their children’s credit.
+
+Rhode Islanders are urged to protect their financial information by freezing and monitoring credit, enabling multi-factor authentication, and avoiding phishing scams.
+
+Follow me on Twitter: @securityaffairs and Facebook and Mastodon
+
+Pierluigi Paganini
+
+(SecurityAffairs – hacking, data breach)
+
+FACEBOOK 
+LINKEDIN 
+TWITTER
+Cybercrime
+Dark Web
+data breach
+Hacking
+hacking news
+information security news
+IT Information Security
+malware
+Pierluigi Paganini
+Rhode Island
+Security Affairs
+Security News

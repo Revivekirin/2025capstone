@@ -1,0 +1,45 @@
+제목: UAT-5918 ATP group targets critical Taiwan
+URL: https://securityaffairs.com/175728/hacking/uat-5918-atp-group-targets-critical-taiwan.html
+
+UAT-5918 ATP GROUP TARGETS CRITICAL TAIWAN
+Pierluigi Paganini
+ 
+March 23, 2025
+Cisco Talos found UAT-5918, active since 2023, using web shells and open-source tools for persistence, info theft, and credential harvesting.
+
+Cisco Talos uncovered UAT-5918, an info-stealing threat actor active since 2023, using web shells and open-source tools for persistence and credential theft.
+
+The APT UAT-5918 targets Taiwan, exploiting N-day vulnerabilities in unpatched servers for long-term access. The group manually conducts post-compromise activities, using open-source tools for reconnaissance, credential theft, and persistence. They deploy web shells across subdomains, create admin accounts, and leverage tools like Mimikatz, Fast Reverse Proxy (FRP), and Impacket for lateral movement via RDP and PowerShell remoting, ensuring multiple entry points into victim networks.
+
+The researchers linked the group to China due to TTPs overlap with multiple Chinese APT group.
+
+“UAT-5918’s tooling and TTPs overlap substantially with several APT groups including Volt Typhoon, Flax Typhoon and Dalbit.” reads the report published by Talos. “There is a significant overlap in post-compromise tooling and TTPs with Volt Typhoon, such as using ping and tools like In-Swor for network discovery; gathering system information such as drive and partition; gathering logical drive information such as names, IDs, size, and free spaces; credential dumping from web browser applications; using open-source tools such as frp, Earthworm, and Impacket for establishing control channels; and the absence of custom-made malware.”
+
+UAT-5918 shares tooling and tactics with Chinese APT groups Tropic Trooper, Earth Estries, and Dalbit, using tools like FRP, FScan, Impacket, and web shells. The researchers observed overlaps that include Crowdoor Loader and SparrowDoor malware. However, UAT-5918 also employs unique tools like LaZagne, SNetCracker, and PortBrute, which haven’t been publicly linked to other groups, suggesting either exclusive use or undisclosed associations.
+
+The threat actor uses FRP and Neo-reGeorge to establish reverse proxy tunnels to maintain access to compromised endpoints via attacker controlled remote hosts. The researchers noticed that tools are usually downloaded as archives and extracted before execution.
+
+UAT-5918 mainly targets Taiwan’s telecom, healthcare, IT, and critical infrastructure sectors.
+
+UAT-5918 maintains persistent access by deploying ASP and PHP web shells deep in system directories and using JuicyPotato for privilege escalation. They create backdoored admin accounts and steal credentials via Mimikatz, LaZagne, and registry dumps. The group pivots within networks using RDP, Impacket, and brute-force tools like SNETCracker. They stage and exfiltrate data, including confidential files and database backups, using SQLCMD. Their tactics ensure long-term access for data theft across compromised enterprises.
+
+Talos researchers published Indicators of Compromise (IOCs) on their GitHub repository. 
+
+Follow me on Twitter: @securityaffairs and Facebook and Mastodon
+
+Pierluigi Paganini
+
+(SecurityAffairs – hacking, UAT-5918)
+
+FACEBOOK 
+LINKEDIN 
+TWITTER
+China
+Hacking
+hacking news
+information security news
+IT Information Security
+Pierluigi Paganini
+Security Affairs
+Security News
+Taiwan
