@@ -15,10 +15,10 @@ docker build -t playwright-crawler .
 
 # Run the container with your desired keyword
 docker run --rm -e KEYWORD=babuk -v $(pwd)/downloads:/app/downloads playwright-crawler
+```
 
-KEYWORD should be the name of a ransomware group (e.g., babuk, lockbit, etc.)
+KEYWORD should be the name of a ransomware group (e.g., `babuk`, `lockbit`, etc.)
 
-The crawler will save the results as .txt and .png files in the following path:
+The crawler will save the results as `.txt` and `.png` files in the following path:
 
-```bash
-/app/downloads
+`/app/downloads`

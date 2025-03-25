@@ -1,0 +1,38 @@
+제목: FCC Investigates Chinese Entities on US Government’s Prohibited List
+URL: https://gbhackers.com/fcc-investigates-chinese-entities/
+
+The Federal Communications Commission (FCC) has initiated a new investigation into Chinese entities previously identified as national security risks to ensure these companies are not circumventing U.S. regulations.
+
+FCC Chairman Brendan Carr announced the move today as the first major initiative led by the newly established Council on National Security within the FCC.
+
+The investigation focuses on companies that were added to the FCC’s Covered List due to security concerns, including Huawei Technologies, ZTE Corporation, Hytera Communications, Hangzhou Hikvision Digital Technology, Dahua Technology, and others.
+
+These firms are allegedly aligned with the Chinese Communist Party (CCP) and are accused of engaging in activities that pose “unacceptable risks” to U.S. national security and communication networks.
+
+Despite the restrictions imposed by the FCC, there are concerns that some of these entities may still be operating in the U.S., potentially exploiting regulatory gaps.
+
+Investigation Details and Goals
+
+To determine the extent of these companies’ U.S. operations, the FCC has issued Letters of Inquiry and subpoenas to the targeted entities.
+
+The gathered information will help the commission assess their compliance with existing prohibitions and take necessary measures to safeguard U.S. telecommunications infrastructure.
+
+Chairman Carr emphasized the FCC’s commitment to closing any loopholes that might allow prohibited entities to continue their operations.
+
+“We have reason to believe that some of these companies are exploiting grey areas to continue their business in America. The Council on National Security will work swiftly, in collaboration with federal partners, to eliminate any vulnerabilities and uphold our national security,” Carr stated.
+
+The investigation extends beyond these firms, seeking data on other companies that may be aiding their U.S. operations.
+
+The FCC has pledged to take decisive action based on the findings to prevent untrustworthy actors from undermining its rules and jeopardizing the security of American networks.
+
+This initiative builds on earlier FCC measures, which included placing the companies on the Covered List and revoking their authorizations to operate in regulated capacities.
+
+The targeted entities have been accused of facilitating surveillance and espionage on behalf of the CCP.
+
+Their inclusion on the Covered List is part of a broader effort to fortify U.S. communications networks against foreign threats.
+
+The FCC’s proactive stance reflects its commitment to countering foreign interference and securing critical infrastructure.
+
+As the investigation unfolds, the agency aims to ensure that any CCP-aligned operations are fully identified and halted.
+
+Investigate Real-World Malicious Links & Phishing Attacks With Threat Intelligence Lookup - Try for Free
