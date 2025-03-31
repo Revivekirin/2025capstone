@@ -1,0 +1,35 @@
+services:
+  torproxy:
+    image: dperson/torproxy
+    container_name: torproxy
+    restart: unless-stopped
+    ports:
+      - "9050:9050"
+
+  playwright-crawler:
+    build:
+      context: .
+    container_name: playwright-crawler
+    depends_on:
+      - torproxy
+    volumes:
+      - ./downloads:/app/downloads
+    network_mode: host
+    command: bash -c "sleep 7 && node crawl_ransomewatch.js"
+
+  curl-crawler:
+    image: python:3.11-alpine
+    container_name: curl-crawler
+    depends_on:
+      - torproxy
+    volumes:
+      - ./downloads:/app/downloads
+      - ./crawl_with_curl.py:/app/crawl_with_curl.py
+    working_dir: /app
+    network_mode: host
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        apk add --no-cache curl
+        python crawl_with_curl.py
