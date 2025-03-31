@@ -22,7 +22,7 @@ docker run --rm -e KEYWORD=babuk -v "$PWD/downloads:/app/downloads" playwright-c
 docker run --rm -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_security_affairs.js
 
 # ransomwatch
-docker run --rm -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_ransomwatch.js
+docker run --rm -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_ransomewatch.js
 
 ```
 
