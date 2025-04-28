@@ -5,6 +5,7 @@ WORKDIR /app
 RUN npm init -y
 RUN npm install playwright@1.51.1
 RUN npm install axios
+RUN npm install socks-proxy-agent
 
 COPY . .
 

@@ -3,27 +3,40 @@ services:
     image: dperson/torproxy
     container_name: torproxy
     restart: unless-stopped
+    network_mode: host
     ports:
       - "9050:9050"
+    healthcheck:
+      test: ["CMD", "curl", "--socks5-hostname", "127.0.0.1:9050", "-s", "https://check.torproject.org/"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
 
-  playwright-crawler:
-    build:
-      context: .
-    container_name: playwright-crawler
-    depends_on:
-      - torproxy
-    volumes:
-      - ./downloads:/app/downloads
-    network_mode: host
-    command: bash -c "sleep 7 && node crawl_ransomewatch.js"
+  # playwright-crawler:
+  #   build:
+  #     context: .
+  #   container_name: playwright-crawler
+  #   volumes:
+  #     - ./downloads:/app/downloads
+  #     - ./cmd/start_playwright.sh:/app/start_playwright.sh  
+  #   working_dir: /app
+  #   network_mode: host
+  #   entrypoint: /bin/sh
+  #   command:
+  #     - -c
+  #     - |
+  #       chmod +x /app/start_playwright.sh
+  #       /app/start_playwright.sh
 
   curl-crawler:
     image: python:3.11-alpine
     container_name: curl-crawler
     depends_on:
-      - torproxy
+      torproxy:
+        condition: service_healthy
     volumes:
       - ./downloads:/app/downloads
+      - ./cmd/start_curl.sh:/app/start_curl.sh   
       - ./crawl_with_curl.py:/app/crawl_with_curl.py
     working_dir: /app
     network_mode: host
@@ -32,4 +45,6 @@ services:
       - -c
       - |
         apk add --no-cache curl
-        python crawl_with_curl.py
+        pip install pysocks requests       
+        chmod +x /app/start_curl.sh
+        /app/start_curl.sh
