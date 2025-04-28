@@ -80,13 +80,13 @@ ${content}
     );
 
     if (images.length > 0) {
-      console.log(`🖼️ 이미지 저장 중 (${images.length}개)...`);
+      console.log(`이미지 저장 중 (${images.length}개)...`);
       for (const [imgIdx, src] of images.entries()) {
         const ext = path.extname(new URL(src).pathname) || '.jpg';
         const filename = path.join(articleDir, `image_${imgIdx + 1}${ext}`);
         try {
           await downloadImage(src, filename);
-          console.log(`   ✅ 저장됨: ${filename}`);
+          console.log(`   저장됨: ${filename}`);
         } catch (err) {
           console.log(`   ❌ 실패: ${src}`);
         }
