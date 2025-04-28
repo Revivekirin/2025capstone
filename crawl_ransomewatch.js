@@ -2,8 +2,7 @@ const { chromium } = require('playwright');
 const axios = require('axios');
 const fs = require('fs');
 
-(async () => {
-  // 1. 오늘 날짜 기준 그룹 수집
+async function runCrawler() {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
@@ -39,7 +38,6 @@ const fs = require('fs');
 
   console.log(`Groups listed on ${today}:`, groups);
 
-  // 2. 각 그룹별 최신 FQDN 수집
   const groupsWithFqdn = [];
 
   for (const group of groups) {
@@ -55,14 +53,11 @@ const fs = require('fs');
     groupsWithFqdn.push({ group, fqdn });
   }
 
-  // 3. 결과 저장 (JSON)
   const outputPath = '/app/downloads/onion_list.json';
   fs.writeFileSync(outputPath, JSON.stringify(groupsWithFqdn, null, 2));
   console.log(`📦 저장 완료: ${outputPath}`);
+}
 
-})();
-
-// 4. 그룹 이름으로 최신 FQDN 조회 함수
 async function getLatestOnionFQDN(groupName) {
   try {
     const res = await axios.get('https://ransomwhat.telemetry.ltd/groups');
@@ -81,7 +76,14 @@ async function getLatestOnionFQDN(groupName) {
   }
 }
 
-// (선택) 컨테이너 유지 로그
-setInterval(() => {
-  console.log('⏳ Waiting... container is still running.');
-}, 60 * 1000);
+async function loop() {
+  while (true) {
+    console.log(`\nPlaywright 크롤러 실행`);
+    await runCrawler();
+    console.log(`Playwright 크롤링 완료, 다음 실행까지 대기`);
+
+    await new Promise(resolve => setTimeout(resolve, 10 * 60 * 1000)); // 10분마다
+  }
+}
+
+loop();
