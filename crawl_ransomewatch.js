@@ -22,16 +22,17 @@ async function safeGoto(page, url, options = {}, retries = 3, delayMs = 5000) {
 async function runCrawler() {
   console.log(`[▶] Playwright 시작`);
 
-  const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });  // docker에서는 --no-sandbox 추천
+  const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
   const page = await browser.newPage();
 
   await safeGoto(page, 'https://ransomwatch.telemetry.ltd/#/recentposts', {
     waitUntil: 'domcontentloaded',
-    timeout: 30000,   // 최대 30초 대기
+    timeout: 30000,
   });
 
   await page.waitForTimeout(5000);
-  const today = new Date().toISOString().slice(0, 10);
+  // const today = new Date().toISOString().slice(0, 10);
+  const today = "2025-04-28"; 
 
   const groups = await page.evaluate((today) => {
     const rows = Array.from(document.querySelectorAll('tbody tr'));
@@ -58,8 +59,24 @@ async function runCrawler() {
 
   console.log(`Groups listed on ${today}:`, groups);
 
-  const groupsWithFqdn = [];
+  const outputPath = '/app/downloads/onion_list.json';
+  let existingData = [];
 
+  if (fs.existsSync(outputPath)) {
+    try {
+      existingData = JSON.parse(fs.readFileSync(outputPath, 'utf-8'));
+    } catch (err) {
+      console.error("[ERROR] 기존 JSON 파일 읽기 실패:", err.message);
+    }
+  }
+
+  // 기존 데이터: group → fqdn
+  const existingMap = {};
+  for (const item of existingData) {
+    existingMap[item.group] = item.fqdn;
+  }
+
+  // 업데이트 처리
   for (const group of groups) {
     console.log(`\n--- ${group} ---`);
     const fqdn = await getLatestOnionFQDN(group);
@@ -69,14 +86,26 @@ async function runCrawler() {
       continue;
     }
 
-    console.log(`🧅 ${group} 최신 FQDN: ${fqdn}`);
-    groupsWithFqdn.push({ group, fqdn });
+    const previousFqdn = existingMap[group];
+    if (previousFqdn && previousFqdn !== fqdn) {
+      console.log(`🔄 ${group}의 FQDN이 변경됨: ${previousFqdn} → ${fqdn}`);
+      // 업데이트
+      const index = existingData.findIndex(item => item.group === group);
+      if (index !== -1) {
+        existingData[index].fqdn = fqdn;
+      }
+    } else if (!previousFqdn) {
+      console.log(`➕ ${group} 신규 등록`);
+      existingData.push({ group, fqdn });
+    } else {
+      console.log(`✅ ${group} 기존 FQDN 유지`);
+    }
   }
 
-  const outputPath = '/app/downloads/onion_list.json';
-  fs.writeFileSync(outputPath, JSON.stringify(groupsWithFqdn, null, 2));
+  fs.writeFileSync(outputPath, JSON.stringify(existingData, null, 2));
   console.log(`📦 저장 완료: ${outputPath}`);
 }
+
 
 async function getLatestOnionFQDN(groupName) {
   try {

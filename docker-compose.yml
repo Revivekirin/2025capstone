@@ -1,4 +1,19 @@
 services:
+  # playwright-crawler:
+  #     build:
+  #       context: .
+  #     container_name: playwright-crawler
+  #     volumes:
+  #       - ./downloads:/app/downloads
+  #       - ./cmd/start_playwright.sh:/app/start_playwright.sh  
+  #     working_dir: /app
+  #     network_mode: host
+  #     entrypoint: /bin/sh
+  #     command:
+  #       - -c
+  #       - |
+  #         chmod +x /app/start_playwright.sh
+  #         /app/start_playwright.sh
   torproxy:
     image: dperson/torproxy
     container_name: torproxy
@@ -11,22 +26,6 @@ services:
       interval: 20s
       timeout: 10s
       retries: 5
-
-  # playwright-crawler:
-  #   build:
-  #     context: .
-  #   container_name: playwright-crawler
-  #   volumes:
-  #     - ./downloads:/app/downloads
-  #     - ./cmd/start_playwright.sh:/app/start_playwright.sh  
-  #   working_dir: /app
-  #   network_mode: host
-  #   entrypoint: /bin/sh
-  #   command:
-  #     - -c
-  #     - |
-  #       chmod +x /app/start_playwright.sh
-  #       /app/start_playwright.sh
 
   curl-crawler:
     image: python:3.11-alpine
