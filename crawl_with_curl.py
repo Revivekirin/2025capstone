@@ -22,6 +22,7 @@ def wait_for_tor_proxy_ready(max_retries=10, delay_sec=10):
         time.sleep(delay_sec)
     print("[✖] Tor Proxy not ready after retries. Exiting.")
     exit(1)
+
 def run_crawler():
     json_path = Path("/app/downloads/onion_list.json")
 
@@ -38,33 +39,42 @@ def run_crawler():
 
     today_str = datetime.now().strftime("%Y%m%d")
 
-    special_groups = ["play"]  # 여기에 "play", "xyz", "abc" 등 추가 가능
+    # 여기에 특수한 URL 패턴을 가지는 그룹들을 추가
+    special_groups = ["play", "blacksuit", "kairos"]
 
     for entry in fqdn_list:
         fqdn = entry.get("fqdn")
-        group = entry.get("group")
+        group = entry.get("group", "").lower().strip()  # group 필드가 없거나 대소문자 대비
+
         if not fqdn:
             continue
 
         print(f"\n크롤링 시작: {fqdn} (group: {group})")
 
         for page_num in range(1, 6):
-            # 그룹이 특별 리스트에 있을 경우 /index.php?page=N 사용
             if group in special_groups:
-                if page_num == 1:
-                    url = f"http://{fqdn}/"
-                    suffix = "page1"
+                if group == "kairos":
+                    if page_num == 1:
+                        url = f"http://{fqdn}/"
+                        suffix = "page1"
+                    else:
+                        url = f"http://{fqdn}/?PAGEN_1={page_num}"
+                        suffix = f"page{page_num}"
                 else:
-                    url = f"http://{fqdn}/index.php?page={page_num}"
-                    suffix = f"page{page_num}"
+                    if page_num == 1:
+                        url = f"http://{fqdn}/"
+                        suffix = "page1"
+                    else:
+                        url = f"http://{fqdn}/index.php?page={page_num}"
+                        suffix = f"page{page_num}"
             else:
-                # 일반 그룹은 기본 방식 (page 쿼리만 추가)
                 if page_num == 1:
                     url = f"http://{fqdn}/"
                     suffix = "page1"
                 else:
                     url = f"http://{fqdn}/?page={page_num}"
                     suffix = f"page{page_num}"
+
 
             filename = f"{fqdn.replace('.', '_').replace('/', '')}_{today_str}_{suffix}.html"
             outfile = f"/app/downloads/{filename}"
@@ -83,11 +93,10 @@ def run_crawler():
 
             try:
                 subprocess.run(curl_cmd, check=True)
-                print(f"저장됨: {outfile}")
+                print(f"✅ 저장됨: {outfile}")
             except subprocess.CalledProcessError:
                 print(f"❌ 페이지 없음 또는 실패: {url} → 다음 fqdn으로 이동")
-                break  
-
+                break  # 다음 fqdn으로
 
 def main():
     wait_for_tor_proxy_ready()
