@@ -12,7 +12,7 @@ from datetime import datetime
 
 # 경로 설정
 html_dir = Path("~/downloads")
-oinion_json = Path("~/downloads/onion_list.json")
+onion_json = Path("~/downloads/onion_list.json")
 today_str = datetime.now().strftime("%Y%m%d")
 output_csv = f"urls_with_groups_ip_{today_str}.csv"
 
