@@ -28,7 +28,7 @@ const downloadImage = (url, filepath) => {
 };
 
 const getTodayString = () => {
-  const today = new Date('2025-05-01');
+  const today = new Date();
   const options = { year: 'numeric', month: 'long', day: '2-digit' };
   return today.toLocaleDateString('en-US', options); // "May 01, 2025"
 };
