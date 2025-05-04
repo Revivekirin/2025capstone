@@ -5,4 +5,10 @@ USER root
 RUN apt-get update && \
     apt-get install -y docker.io docker-compose
 
+# docker group 추가 및 jenkins 유저를 추가
+RUN groupadd docker && usermod -aG docker jenkins
+
+# 퍼미션 문제 방지
+RUN chown root:docker /var/run/docker.sock || true
+
 USER jenkins
