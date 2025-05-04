@@ -34,8 +34,6 @@ services:
     container_name: torproxy
     restart: unless-stopped
     network_mode: host
-    ports:
-      - "9050:9050"
     healthcheck:
       test: ["CMD", "curl", "--socks5-hostname", "127.0.0.1:9050", "-s", "https://check.torproject.org/"]
       interval: 20s

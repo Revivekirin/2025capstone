@@ -6,4 +6,5 @@ RUN npm init -y
 RUN npm install playwright@1.51.1 axios socks-proxy-agent
 
 COPY cmd/start_playwright.sh /app/start_playwright.sh
+#COPY cmd/start_playwright.sh /app/start_playwright.sh
 COPY crawl_*.js /app/
