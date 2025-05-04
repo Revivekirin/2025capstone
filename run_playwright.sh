@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "[$(date)] 📦 playwright-crawler 실행 시작"
 
-cd /home/사용자/2025capstone || exit 1
+cd /home/capstone-design/Downloads/2025capstone  || exit 1
 
 # Docker 이미지 빌드
 docker build -t playwright-crawler .
