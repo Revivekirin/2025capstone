@@ -3,7 +3,7 @@ import subprocess
 import time
 from pathlib import Path
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def wait_for_tor_proxy_ready(max_retries=10, delay_sec=10):
     for attempt in range(1, max_retries + 1):
@@ -38,6 +38,7 @@ def run_crawler():
         return
 
     today_str = datetime.now().strftime("%Y%m%d")
+    # today_str = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
 
     # 여기에 특수한 URL 패턴을 가지는 그룹들을 추가
     special_groups = ["play", "blacksuit", "kairos"]

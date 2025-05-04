@@ -8,12 +8,13 @@ import re
 import subprocess
 from bs4 import BeautifulSoup
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # 경로 설정
 html_dir = Path("~/downloads")
 onion_json = Path("~/downloads/onion_list.json")
 today_str = datetime.now().strftime("%Y%m%d")
+# today_str = today_str = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
 output_csv = f"urls_with_groups_ip_{today_str}.csv"
 
 # JSON 로딩: fqdn → group 맵핑

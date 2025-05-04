@@ -16,6 +16,11 @@ const urlsToCheck = [
 ];
 
 const getTodayISODate = () => new Date().toISOString().split('T')[0];
+// const getTodayISODate = () => {
+//   const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+//   return yesterday.toISOString().split('T')[0];
+// };
+
 
 const downloadImage = (url, filepath) => {
   return new Promise((resolve, reject) => {

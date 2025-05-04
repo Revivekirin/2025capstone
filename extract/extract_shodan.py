@@ -6,7 +6,7 @@ import os
 import pandas as pd
 import subprocess
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 
@@ -18,6 +18,7 @@ if not api_key:
 
 # CSV 파일 경로 설정
 today_str = datetime.now().strftime("%Y%m%d")
+# today_str = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
 csv_path = f"urls_with_groups_ip_{today_str}.csv"
 
 # 기존 CSV 파일 불러오기

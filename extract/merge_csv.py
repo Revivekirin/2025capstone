@@ -1,11 +1,12 @@
 import pandas as pd
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # CSV 파일들이 있는 디렉토리 경로
-csv_dir = Path("~/downloads/extract")  # 경로 수정 필요
+csv_dir = Path("~/extract")  # 경로 수정 필요
 csv_files = list(csv_dir.glob("*.csv"))
 today_str = datetime.now().strftime("%Y%m%d")
+# today_str = today_str = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
 
 # 모든 CSV 파일 병합
 all_dfs = []
