@@ -1,0 +1,55 @@
+제목: Threat Actors Use AiTM Attacks with Reverse Proxies to Bypass MFA
+URL: https://gbhackers.com/threat-actors-use-aitm-attacks/
+
+Cybercriminals are intensifying their efforts to undermine multi-factor authentication (MFA) through adversary-in-the-middle (AiTM) attacks, leveraging reverse proxies to intercept sensitive data.
+
+As phishing tactics grow more advanced, traditional defenses like spam filters and user training are proving insufficient.
+
+Attackers deploy reverse proxies as intermediary servers to forward victim traffic to legitimate websites, creating an illusion of authenticity.
+
+- Advertisement -
+
+This setup allows them to capture usernames, passwords, and authentication cookies during the MFA process, effectively bypassing additional security layers.
+
+The legitimate appearance of the targeted site-coupled with the correct functionality-often deceives users, with the only giveaway being a subtle discrepancy in the browser’s address bar.
+
+Flow diagram illustrating MFA bypass using a reverse proxy
+Phishing-as-a-Service Kits Lower the Barrier for Attackers
+
+The proliferation of Phishing-as-a-Service (PhaaS) toolkits such as Tycoon 2FA and Evilproxy has democratized these sophisticated attacks, enabling even novices to execute MFA bypass campaigns.
+
+These kits come equipped with pre-built templates for popular targets, IP and User-Agent filtering to evade detection, and obfuscated JavaScript to gather additional victim data.
+
+Open-source tools like Evilginx, originally designed for penetration testing, further exacerbate the issue by providing customizable reverse proxy capabilities.
+
+By intercepting session cookies, attackers gain temporary access to victim accounts, often adding persistent MFA devices to maintain long-term control.
+
+Detection remains challenging, though indicators like newly registered domains, unusual session behavior in logs, and mismatched TLS fingerprints offer defenders some clues to identify potential AiTM activity.
+
+WebAuthn Emerges as a Potential Countermeasure
+
+Amidst the rising tide of MFA bypass attacks, WebAuthn, a passwordless authentication standard developed by the FIDO Alliance and W3C, offers a robust defense.
+
+Utilizing public key cryptography, WebAuthn eliminates password transmission by storing private keys on user devices and public keys on servers.
+
+During authentication, a challenge-response mechanism ensures security without exposing sensitive data, rendering server-side credential databases useless to attackers.
+
+Additionally, WebAuthn binds credentials to specific website origins, thwarting phishing attempts via reverse proxies since the domain mismatch halts the authentication process.
+
+The WebAuthn authentication process.
+
+This also nullifies credential stuffing attacks, as stolen keys are unusable elsewhere. Despite its potential, WebAuthn adoption remains slow, with Cisco Duo telemetry indicating minimal usage compared to other MFA methods over the past six months.
+
+The evolving landscape of phishing, now fortified by AiTM and reverse proxy techniques, underscores a critical need for organizations to reassess their authentication strategies.
+
+While MFA once provided a strong barrier, its vulnerabilities are increasingly exploited by toolkits that simplify complex attacks.
+
+WebAuthn stands out as a promising solution, countering the core mechanisms of phishing by removing passwords from the equation and enforcing origin-specific security.
+
+However, its limited adoption suggests a gap in awareness or infrastructure readiness.
+
+As Cisco Talos advises, businesses must prioritize revisiting their MFA frameworks to incorporate stronger, passwordless alternatives and stay ahead of cybercriminals who continue to refine their tactics with alarming creativity and persistence.
+
+The urgency to adapt has never been clearer, as the sophistication of phishing threatens to outpace conventional defenses.
+
+Find this News Interesting! Follow us on Google News, LinkedIn, & X to Get Instant Updates!
