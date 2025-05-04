@@ -4,16 +4,24 @@ const path = require('path');
 const https = require('https');
 const http = require('http');
 
-const keyword = process.env.KEYWORD || 'ransomware';
-const searchUrl = `https://gbhackers.com/?s=${encodeURIComponent(keyword)}`;
+const urlsToCheck = [
+  'https://gbhackers.com/',
+  'https://gbhackers.com/category/threatsattacks/',
+  'https://gbhackers.com/category/cyber-attack/',
+  'https://gbhackers.com/category/data-breach/',
+  'https://gbhackers.com/category/vulnerability-android-2/',
+  'https://gbhackers.com/category/what-is/',
+  'https://gbhackers.com/category/incident-response/',
+  'https://gbhackers.com/category/top-10/',
+];
+
+const getTodayISODate = () => new Date().toISOString().split('T')[0];
 
 const downloadImage = (url, filepath) => {
   return new Promise((resolve, reject) => {
     const mod = url.startsWith('https') ? https : http;
     mod.get(url, (res) => {
-      if (res.statusCode !== 200) {
-        return reject(new Error(`Failed to get '${url}' (${res.statusCode})`));
-      }
+      if (res.statusCode !== 200) return reject(new Error(`Failed to get '${url}' (${res.statusCode})`));
       const fileStream = fs.createWriteStream(filepath);
       res.pipe(fileStream);
       fileStream.on('finish', () => fileStream.close(resolve));
@@ -24,81 +32,84 @@ const downloadImage = (url, filepath) => {
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
+  const todayDate = getTodayISODate();
+  const seenUrls = new Set();
+  let totalCollected = 0;
 
-  await page.goto(searchUrl, { waitUntil: 'networkidle' });
-
-  // 기사 목록 수집
-  let articles = await page.$$eval('h3.entry-title > a', links =>
-    links.map(link => ({
-      title: link.textContent.trim(),
-      url: link.href
-    }))
-  );
-
-  // 최신 기사 3개로 제한
-  articles = articles.slice(0, 3);
-
-  console.log(`🔎 검색어 "${keyword}"에 대한 최신 기사 3개 수집\n`);
-
-  for (const [index, article] of articles.entries()) {
-    const safeTitle = article.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    const articleDir = path.join(__dirname, 'downloads', `${index + 1}_${safeTitle}`);
-    fs.mkdirSync(articleDir, { recursive: true });
-
-    console.log(`📄 [${index + 1}] ${article.title}`);
-    console.log(`🔗 URL: ${article.url}`);
-
-    const articlePage = await browser.newPage();
-    await articlePage.goto(article.url, { waitUntil: 'domcontentloaded', timeout: 60000  });
-
-    let content = '';
+  for (const url of urlsToCheck) {
+    console.log(`🌐 방문 중: ${url}`);
     try {
-      content = await articlePage.$eval('div.td-post-content', el => el.innerText.trim());
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
-      // 전체 기사 내용 저장 (제목 + URL 포함)
-      const fullText = `
-제목: ${article.title}
-URL: ${article.url}
+      const todaysArticles = await page.$$eval('div.td_module_10', (nodes, todayDate) => {
+        return nodes.map(node => {
+          const timeTag = node.querySelector('time.entry-date');
+          const linkTag = node.querySelector('h3.entry-title > a');
+          if (!timeTag || !linkTag) return null;
+          const datetime = timeTag.getAttribute('datetime') || '';
+          const dateOnly = datetime.split('T')[0];
+          if (dateOnly === todayDate) {
+            return {
+              title: linkTag.textContent.trim(),
+              url: linkTag.href,
+            };
+          }
+          return null;
+        }).filter(Boolean);
+      }, todayDate);
 
-${content}
-      `.trim();
+      for (const article of todaysArticles) {
+        if (seenUrls.has(article.url)) continue;
+        seenUrls.add(article.url);
 
-      //article.txt 저장
-      fs.writeFileSync(path.join(articleDir, 'article.txt'), fullText, 'utf-8');    
-      console.log(`📝 전체 기사 내용:\n\n${fullText}\n`);
-    } catch (e) {
-      console.log(`📝 기사 내용을 찾을 수 없음 \n`);
-      
-      //article.txt 저장
-      fs.writeFileSync(path.join(articleDir, 'article.txt'), '(본문을 찾을 수 없음)', 'utf-8');
-    }
+        const safeTitle = article.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        const articleDir = path.join(__dirname, 'downloads', `${++totalCollected}_${safeTitle}`);
+        fs.mkdirSync(articleDir, { recursive: true });
 
-    // 이미지 저장
-    const images = await articlePage.$$eval('div.td-post-content img', imgs =>
-      imgs.map(img => img.getAttribute('data-src') || img.src)
-          .filter(src => src && src.startsWith('http'))
-    );
+        console.log(`📄 ${article.title}`);
+        console.log(`🔗 ${article.url}`);
 
-    if (images.length > 0) {
-      console.log(`이미지 저장 중 (${images.length}개)...`);
-      for (const [imgIdx, src] of images.entries()) {
-        const ext = path.extname(new URL(src).pathname) || '.jpg';
-        const filename = path.join(articleDir, `image_${imgIdx + 1}${ext}`);
+        const articlePage = await browser.newPage();
         try {
-          await downloadImage(src, filename);
-          console.log(`   저장됨: ${filename}`);
-        } catch (err) {
-          console.log(`   ❌ 실패: ${src}`);
+          await articlePage.goto(article.url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        } catch (e) {
+          console.error(`❌ 페이지 열기 실패: ${article.url}`);
+          await articlePage.close();
+          continue;
         }
-      }
-    } else {
-      console.log("🖼️ 저장할 이미지 없음");
-    }
 
-    console.log('\n' + '-'.repeat(100) + '\n');
-    await articlePage.close();
+        let content = '';
+        try {
+          content = await articlePage.$eval('div.td-post-content', el => el.innerText.trim());
+        } catch {
+          content = '(본문을 찾을 수 없음)';
+        }
+
+        fs.writeFileSync(path.join(articleDir, 'article.txt'), `제목: ${article.title}\nURL: ${article.url}\n\n${content}`, 'utf-8');
+
+        const images = await articlePage.$$eval('div.td-post-content img', imgs =>
+          imgs.map(img => img.getAttribute('data-src') || img.src).filter(src => src?.startsWith('http'))
+        );
+
+        for (const [idx, imgUrl] of images.entries()) {
+          const ext = path.extname(new URL(imgUrl).pathname) || '.jpg';
+          const imgPath = path.join(articleDir, `image_${idx + 1}${ext}`);
+          try {
+            await downloadImage(imgUrl, imgPath);
+            console.log(`   🖼️ 저장됨: ${imgPath}`);
+          } catch {
+            console.warn(`   ❌ 이미지 실패: ${imgUrl}`);
+          }
+        }
+
+        await articlePage.close();
+        console.log('-'.repeat(80));
+      }
+    } catch (err) {
+      console.error(`❌ ${url} 방문 중 오류 발생: ${err.message}`);
+    }
   }
 
+  console.log(`\n✅ 오늘(${todayDate}) 수집된 기사 수: ${totalCollected}`);
   await browser.close();
-  // 절대 resolve 되지 않음
 })();
