@@ -1,35 +1,19 @@
 services:
-  jenkins:
-    container_name: jenkins
-    build:
-      context: .
-      dockerfile: Dockerfile.jenkins
-    ports:
-      - "8080:8080"
-      - "50000:50000"
-    volumes:
-      - ./jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./downloads:/downloads
-    restart: unless-stopped
-
-
-
-  playwright-crawler:
-      build:
-        context: .
-      container_name: playwright-crawler
-      volumes:
-        - ./downloads:/app/downloads
-        - ./cmd/start_playwright.sh:/app/start_playwright.sh  
-      working_dir: /app
-      network_mode: host
-      entrypoint: /bin/sh
-      command: []
-        # - -c
-        # - |
-        #   chmod +x /app/start_playwright.sh
-        #   /app/start_playwright.sh
+  # playwright-crawler:
+  #     build:
+  #       context: .
+  #     container_name: playwright-crawler
+  #     volumes:
+  #       - ./downloads:/app/downloads
+  #       - ./cmd/start_playwright.sh:/app/start_playwright.sh  
+  #     working_dir: /app
+  #     network_mode: host
+  #     entrypoint: /bin/sh
+  #     command: []
+  #       # - -c
+  #       # - |
+  #       #   chmod +x /app/start_playwright.sh
+  #       #   /app/start_playwright.sh
 
   torproxy:
     image: dperson/torproxy
