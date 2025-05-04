@@ -16,7 +16,7 @@ docker build -t playwright-crawler .
 # Run the container with your desired keyword
 #docker run --rm -e KEYWORD=babuk -v $(pwd)/downloads:/app/downloads playwright-crawler
 # gbhackers
-docker run --rm -e KEYWORD=babuk -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_gbhackers.js
+docker run --rm -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_gbhackers.js
 
 # security affairs
 docker run --rm -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_security_affairs.js
