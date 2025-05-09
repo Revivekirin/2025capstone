@@ -77,7 +77,7 @@ def run_crawler():
                     suffix = f"page{page_num}"
 
 
-            filename = f"{fqdn.replace('.', '_').replace('/', '')}_{today_str}_{suffix}.html"
+            filename = f"{group}_{today_str}_{suffix}.html"
             outfile = f"/app/downloads/{filename}"
 
             print(f"👉 요청: {url}")

@@ -33,7 +33,7 @@ async function runCrawler() {
   await page.waitForTimeout(5000);
   //const today = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
   const today = new Date().toISOString().slice(0, 10);
-  //const today = "2025-04-28"; 
+  //const today = "2025-05-08"; 
 
   const groups = await page.evaluate((today) => {
     const rows = Array.from(document.querySelectorAll('tbody tr'));
