@@ -94,7 +94,13 @@ const getTodayString = () => {
 
     for (const [i, article] of todaysArticles.entries()) {
       const safeTitle = article.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-      const articleDir = path.join(__dirname, 'downloads', categoryName, `${i + 1}_${safeTitle}`);
+      const articleDir = path.join(
+        __dirname,
+        'downloads',
+        'security_affairs',
+        todayStr,
+        `${categoryName}_${i + 1}_${safeTitle}`
+      );
       fs.mkdirSync(articleDir, { recursive: true });
 
       console.log(`\uD83D\uDCC4 [${i + 1}] ${article.title}`);

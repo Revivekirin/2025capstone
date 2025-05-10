@@ -42,7 +42,13 @@ const downloadImage = (url, filepath) => new Promise((resolve, reject) => {
     const summary = $(li).find('p').first().text().trim();
 
     const safeTitle = title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    const articleDir = path.join(__dirname, 'downloads', `${++collected}_${safeTitle}`);
+    const articleDir = path.join(
+      __dirname,
+      'downloads',
+      'bleeping_computer',
+      todayDate,
+      `${++collected}_${safeTitle}`
+    );
     fs.mkdirSync(articleDir, { recursive: true });
 
     // 본문 가져오기: <div class="articleBody"> 내 모든 <p> 텍스트
