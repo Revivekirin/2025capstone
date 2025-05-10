@@ -82,44 +82,6 @@ const downloadImage = (url, filepath) => {
             `${categoryName}_${i + 1}_${safeTitle}` 
           );
           fs.mkdirSync(articleDir, { recursive: true });
-    // try {
-    //   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
-
-    //   let articleLinks = [];
-    //   if (url === 'https://gbhackers.com/') {
-    //     articleLinks = await page.$$eval('div.td_module_10 h3.entry-title > a', links =>
-    //       links.slice(0, 5).map(link => ({ url: link.href, title: link.textContent.trim() }))
-    //     );
-    //   } else {
-    //     articleLinks = await page.$$eval('div.td-module-container h3.entry-title > a', links =>
-    //       links.slice(0, 3).map(link => ({ url: link.href, title: link.textContent.trim() }))
-    //     );
-    //   }
-
-    //   for (const article of articleLinks) {
-    //     if (seenUrls.has(article.url)) continue;
-
-    //     const articlePage = await browser.newPage();
-    //     try {
-    //       await articlePage.goto(article.url, { waitUntil: 'domcontentloaded', timeout: 60000 });
-
-    //       const articleDate = await articlePage.$eval('time.entry-date', el => el.getAttribute('datetime').split('T')[0]);
-    //       if (url !== 'https://gbhackers.com/' && articleDate !== todayDate) {
-    //         console.log(`⏭️ 오늘 날짜 아님 (${articleDate}) - ${article.url}`);
-    //         await articlePage.close();
-    //         continue;
-    //       }
-
-    //       seenUrls.add(article.url);
-    //       const safeTitle = article.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    //       const articleDir = path.join(
-    //               __dirname,
-    //               'downloads',
-    //               'gbhackers',
-    //               todayDate, 
-    //               `${categoryName}_${i + 1}_${safeTitle}`
-    //             );
-    //       fs.mkdirSync(articleDir, { recursive: true });
 
           console.log(`📄 ${article.title}`);
           console.log(`🔗 ${article.url}`);

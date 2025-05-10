@@ -7,7 +7,7 @@ const URL = 'https://thehackernews.com/';
   try {
     const response = await axios.get(URL, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)', // 일부 사이트는 UA 없으면 차단함
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
       },
       timeout: 15000,
     });
