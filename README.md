@@ -10,22 +10,17 @@ This is a simple Playwright-based web crawler wrapped in Docker.
 After launching **Docker Desktop**, run the following commands in your terminal:
 
 ```bash
-# Build the Docker image
-docker build -t playwright-crawler .
+# Crawling: gbhackers, security_affairs, ransomewatch
+chmod +x run_playwright.sh
+./scripts/run_playwright.sh
 
-# Run the container with your desired keyword
-#docker run --rm -e KEYWORD=babuk -v $(pwd)/downloads:/app/downloads playwright-crawler
-# gbhackers
-docker run --rm -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_gbhackers.js
-
-# security affairs
-docker run --rm -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_security_affairs.js
-
-# crawl ransomwatch recent post
-docker run --rm -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_ransomewatch.js
+# Crawling: bleeping_computer
+chmod +x run_node.sh
+./scripts/run_node.sh
 
 # crawl darkweb .html from proxy server
-docker compose up
+chmod +x run_compose.sh
+./scripts/run_compose.sh
 
 ```
 
