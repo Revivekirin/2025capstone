@@ -32,13 +32,6 @@ const getTodayString = () => {
   const options = { year: 'numeric', month: 'long', day: '2-digit' };
   return today.toLocaleDateString('en-US', options); // "May 01, 2025"
 };
-// const getTodayString = () => {
-//   const yesterday = new Date();
-//   yesterday.setDate(yesterday.getDate() - 1);  // 하루 전으로 설정
-
-//   const options = { year: 'numeric', month: 'long', day: '2-digit' };
-//   return yesterday.toLocaleDateString('en-US', options); // 예: "May 03, 2025"
-// };
 
 
 (async () => {
