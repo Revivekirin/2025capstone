@@ -21,7 +21,10 @@ docker run --rm -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl
 # security affairs
 docker run --rm -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_security_affairs.js
 
-# ransomwatch
+# crawl ransomwatch recent post
+docker run --rm -v "$PWD/downloads:/app/downloads" playwright-crawler node crawl_ransomewatch.js
+
+# crawl darkweb .html from proxy server
 docker compose up
 
 ```
