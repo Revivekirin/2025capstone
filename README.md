@@ -10,7 +10,7 @@ This is a simple Playwright-based web crawler wrapped in Docker.
 After launching **Docker Desktop**, run the following commands in your terminal:
 
 ```bash
-# Crawling: gbhackers, security_affairs, ransomewatch
+# Crawling: gbhackers, security_affairs, thehackernews, securityweek, ransomewatch
 chmod +x run_playwright.sh
 ./scripts/run_playwright.sh
 

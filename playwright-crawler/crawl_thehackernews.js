@@ -9,7 +9,7 @@ const BASE_URLS = [
   { url: 'https://thehackernews.com/search/label/Vulnerability', category: 'vulnerability' }
 ];
 
-const todayStr = new Date('2025-05-09').toISOString().split('T')[0];
+const todayStr = new Date().toISOString().split('T')[0];
 
 const downloadImage = (url, filepath) => {
   return new Promise((resolve, reject) => {

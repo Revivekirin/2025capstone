@@ -43,7 +43,7 @@ services:
     volumes:
       - ./downloads:/app/downloads
       - ./scripts/start_curl.sh:/app/start_curl.sh   
-      - ./playwright-crawler/crawl_with_curl.py:/app/crawl_with_curl.py
+      - ./crawl_with_curl.py:/app/crawl_with_curl.py
     working_dir: /app
     network_mode: host
     entrypoint: /bin/sh
