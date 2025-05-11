@@ -20,7 +20,7 @@ const { chromium } = require('playwright');
 
   try {
     console.log('🌐 TheHackerNews 접속 중 (stealth 모드)...');
-    await page.goto('https://www.securityweek.com/', { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.goto('https://www.boannews.com/media/t_list.asp', { waitUntil: 'domcontentloaded', timeout: 60000 });
 
     const title = await page.title();
     console.log(`✅ 페이지 제목: ${title}`);
