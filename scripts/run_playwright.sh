@@ -11,6 +11,7 @@ docker run --rm -v "$PWD/downloads:/app/downloads" 2025capstone-playwright-crawl
 docker run --rm -v "$PWD/downloads:/app/downloads" 2025capstone-playwright-crawler node crawl_security_affairs.js
 docker run --rm -v "$PWD/downloads:/app/downloads" 2025capstone-playwright-crawler node crawl_thehackernews.js
 docker run --rm -v "$PWD/downloads:/app/downloads" 2025capstone-playwright-crawler node crawl_security_week.js
+docker run --rm -v "$PWD/downloads:/app/downloads" 2025capstone-playwright-crawler node crawl_boannews.js
 docker run --rm -v "$PWD/downloads:/app/downloads" 2025capstone-playwright-crawler node crawl_ransomewatch.js
 
 echo "[$(date)] playwright-crawler 실행 완료"
