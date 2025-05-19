@@ -65,7 +65,10 @@ const downloadImage = (url, filepath) => {
         try {
           await articlePage.goto(article.url, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
-          const articleDate = await articlePage.$eval('time.entry-date', el => el.getAttribute('datetime').split('T')[0]);
+          // const articleDate = await articlePage.$eval('time.entry-date', el => el.getAttribute('datetime').split('T')[0]);
+          const articleDateText = await articlePage.$eval('time.entry-date', el => el.textContent.trim());
+          const articleDate = new Date(articleDateText).toISOString().split('T')[0];
+
           if (url !== 'https://gbhackers.com/' && articleDate !== todayDate) {
             console.log(`⏭️ 오늘 날짜 아님 (${articleDate}) - ${article.url}`);
             await articlePage.close();
