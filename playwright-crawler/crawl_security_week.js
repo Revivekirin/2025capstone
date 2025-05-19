@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
-const todayStr = new Date('2025-05-09').toISOString().split('T')[0];
+const todayStr = new Date().toISOString().split('T')[0];
 
 const BASE_URL = 'https://www.securityweek.com/';
 

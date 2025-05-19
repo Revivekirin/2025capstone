@@ -5,7 +5,7 @@ const path = require('path');
 const BASE = 'https://www.boannews.com';
 
 const getTodayStr = () => {
-  const now = new Date();
+  const now = new Date(); 
   const yyyy = now.getFullYear();
   const mm = String(now.getMonth() + 1).padStart(2, '0');
   const dd = String(now.getDate()).padStart(2, '0');
@@ -29,53 +29,59 @@ const getTodayStr = () => {
 
   console.log(`🔍 수집된 카테고리: ${baseUrls.length}개\n`);
 
-  for (const categoryUrl of baseUrls) {
-    const page = await context.newPage();
-    await page.goto(categoryUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
-
-    console.log(`📁 [카테고리] ${categoryUrl}`);
-
-    const articles = await page.$$eval('div.news_list, div.news_main', nodes => {
-      return nodes.map(node => {
-        const link = node.querySelector('a[href*="/media/view.asp"]');
-        const title = node.querySelector('.news_txt, .news_main_title')?.innerText.trim() || '';
-        const summary = node.querySelector('.news_content, .news_main_txt')?.innerText.trim() || '';
-        const img = node.querySelector('img')?.src || '';
-
-        let rawDate = '';
-        const writerSpan = node.querySelector('.news_writer');
-        if (writerSpan) {
-          const match = writerSpan.textContent.match(/\d{4}년\s*\d{1,2}월\s*\d{1,2}일/);
-          if (match) rawDate = match[0];
-        } else {
-          const textContent = node.innerText || '';
-          const dateMatch = textContent.match(/\d{4}년\s*\d{1,2}월\s*\d{1,2}일/);
-          rawDate = dateMatch ? dateMatch[0] : '';
-        }
-
-        return { title, summary, img, href: link?.href, rawDate };
-      }).filter(a => a.href);
-    });
-
+  for (const base of baseUrls) {
+    console.log(`📁 [카테고리] ${base}`);
+    let pageNum = 1;
     const todaysArticles = [];
-    for (const a of articles) {
-      let date = a.rawDate;
-      if (!date) {
-        const articlePage = await context.newPage();
-        await articlePage.goto(a.href, { waitUntil: 'domcontentloaded' });
-        try {
-          date = await articlePage.$eval('#news_util01', el => el.textContent.match(/\d{4}-\d{2}-\d{2}/)?.[0] || '');
-        } catch {
-          date = '';
+
+    while (true) {
+      const url = `${base}${base.includes('?') ? '&' : '?'}Page=${pageNum}`;
+      const page = await context.newPage();
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+
+      const articles = await page.$$eval('div.news_list, div.news_main', nodes => {
+        return nodes.map(node => {
+          const link = node.querySelector('a[href*="/media/view.asp"]');
+          const title = node.querySelector('.news_txt, .news_main_title')?.innerText.trim() || '';
+          const summary = node.querySelector('.news_content, .news_main_txt')?.innerText.trim() || '';
+
+          let rawDate = '';
+          const writerSpan = node.querySelector('.news_writer');
+          if (writerSpan) {
+            const match = writerSpan.textContent.match(/\d{4}년\s*\d{1,2}월\s*\d{1,2}일/);
+            if (match) rawDate = match[0];
+          } else {
+            const textContent = node.innerText || '';
+            const dateMatch = textContent.match(/\d{4}년\s*\d{1,2}월\s*\d{1,2}일/);
+            rawDate = dateMatch ? dateMatch[0] : '';
+          }
+
+          return {
+            title,
+            summary,
+            href: link?.href,
+            rawDate
+          };
+        }).filter(a => a.href);
+      });
+
+      let hasToday = false;
+      for (const a of articles) {
+        let date = a.rawDate;
+        if (date) {
+          date = date.replace(/년|월/g, '-').replace(/일/, '').replace(/\s/g, '').trim();
         }
-        await articlePage.close();
-      } else {
-        date = date.replace(/년|월/g, '-').replace(/일/, '').replace(/\s/g, '').trim();
+
+        if (date === today) {
+          hasToday = true;
+          todaysArticles.push({ ...a, date });
+        }
       }
 
-      if (date === today) {
-        todaysArticles.push({ ...a, date });
-      }
+      await page.close();
+
+      if (!hasToday || articles.length === 0) break;
+      pageNum++;
     }
 
     console.log(`📰 오늘 기사 수: ${todaysArticles.length}개\n`);
@@ -105,10 +111,8 @@ const getTodayStr = () => {
       await page2.close();
     }
 
-    await page.close();
     console.log('-'.repeat(80));
   }
 
   await browser.close();
 })();
-
