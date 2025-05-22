@@ -6,12 +6,15 @@ import subprocess
 from bs4 import BeautifulSoup
 from pathlib import Path
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
 
-# 경로 설정
-# downloads 폴더의 실제 경로로 수정해주세요.
-html_dir = Path("/Users/kimjihe/Desktop/git/2025capstone/downloads") # 이 경로는 실제 환경에 맞게 설정
+load_dotenv()
+BASE_DIR = os.getenv("BASE_DIR") 
+ONION_LIST_DIR = os.getenv("ONION_JSON_PATH ")
 
-onion_json = Path("/Users/kimjihe/Desktop/git/2025capstone/downloads/onion_list.json")
+html_dir = Path(BASE_DIR)
+
+onion_json = Path(ONION_LIST_DIR )
 today_str = datetime.now().strftime("%Y%m%d")
 output_csv_path = Path(f"urls_with_groups_ip_{today_str}.csv")
 
@@ -50,13 +53,10 @@ def get_ip_from_dig(domain):
         print(f"Error during dig for {domain}: {e}")
         return "DIG_UNEXPECTED_ERROR"
 
-# 결과 저장
 all_entries = []
 
 print(f"HTML 파일 검색 시작 경로: {html_dir}")
 
-# HTML 파일 순회 (하위 디렉토리 포함)
-# html_dir이 존재하고 디렉토리인지 확인
 if not html_dir.exists() or not html_dir.is_dir():
     print(f"오류: HTML 디렉토리 '{html_dir}'를 찾을 수 없거나 디렉토리가 아닙니다.")
     exit()
@@ -68,13 +68,8 @@ else:
     print(f"총 {len(html_files_found)}개의 HTML 파일 검색됨.")
 
 for html_file in html_files_found:
-    # 그룹명은 HTML 파일이 속한 부모 디렉토리의 이름으로 가져옴
-    # 예: /app/downloads/group_name/file.html -> group_name
     group_name = html_file.parent.name
 
-    # 만약 downloads 폴더 바로 아래에 있는 html 파일도 처리해야 하고,
-    # 그것들은 그룹이 없다면 (또는 downloads 폴더 자체가 그룹명이 아니라면)
-    # 아래와 같이 html_dir과 parent가 같은 경우를 예외처리 할 수 있습니다.
     if html_file.parent == html_dir:
         group_name = "unknown_group_at_root" # 또는 다른 기본값
         print(f"알림: 최상위 디렉토리 파일 '{html_file.name}'. 그룹명 '{group_name}'으로 설정.")
@@ -118,18 +113,11 @@ for html_file in html_files_found:
         if ".onion" in raw_url:
             # print(f"Onion 주소 건너뜀: {raw_url}")
             continue
-            
-        # 파일 확장자로 끝나는 경우 (예: .exe, .pdf)는 URL로 간주하되, IP 조회가 의미 없을 수 있음
-        # 특정 확장자만 필터링 하고 싶다면 추가 로직 필요
 
         domain = extract_domain(raw_url)
         if not domain: # extract_domain이 빈 문자열 반환 시
             continue
 
-        # 이미 처리한 도메인이면 IP 조회 건너뛰기 (성능 향상)
-        # 이 로직은 all_entries를 순회해야 해서 비효율적일 수 있음.
-        # 더 큰 규모에서는 IP 캐싱 메커니즘이 필요.
-        # 여기서는 간단히 파일 내에서만 중복 URL(도메인)을 처리
         if raw_url in extracted_urls_in_file:
             continue
         extracted_urls_in_file.add(raw_url)
@@ -148,4 +136,3 @@ except IOError as e:
     print(f"오류: CSV 파일 '{output_csv_path}' 쓰기 중 문제 발생: {e}")
 except Exception as e:
     print(f"오류: CSV 파일 저장 중 예기치 않은 문제 발생: {e}")
-#

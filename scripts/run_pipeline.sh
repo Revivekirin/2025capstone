@@ -2,9 +2,7 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-# 프로젝트 루트 디렉토리로 이동합니다. (scripts 폴더의 상위 폴더)
-# 이 경우 /Users/kimjihe/Desktop/git/2025capstone/
-PROJECT_ROOT_DIR="$(dirname "$SCRIPT_DIR")" # SCRIPT_DIR의 부모 디렉토리
+PROJECT_ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 cd "$PROJECT_ROOT_DIR"
 
 echo "Current working directory: $(pwd)"
