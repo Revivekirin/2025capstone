@@ -43,7 +43,7 @@ def load_mitre_techniques(xlsx_path):
     print(f"Loading MITRE techniques from: {xlsx_path}")
     try:
         df = pd.read_excel(xlsx_path)
-        if 'ID' not in df.columns or 'name' not in df.colomns:
+        if 'ID' not in df.columns or 'name' not in df.columns:
             if 'ID' in df.columns and 'description' in df.columns and 'name' not in df.columns:
                 print("Warning: 'name' column not found. Using 'description' as name.")
                 teqchniques = list(zip(df['ID'], df['description']))
