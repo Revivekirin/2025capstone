@@ -3,3 +3,6 @@ matplotlib
 shodan
 beautifulsoup4
 python-dotenv
+transformers
+torch
+scikit-learn
