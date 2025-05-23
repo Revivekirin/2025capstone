@@ -9,8 +9,8 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
-BASE_DIR = os.getenv("BASE_DIR") 
-ONION_LIST_DIR = os.getenv("ONION_JSON_PATH ")
+BASE_DIR = os.getenv("BASE_NEWS_DIR") 
+ONION_LIST_DIR = os.getenv("ONION_JSON_PATH")
 
 html_dir = Path(BASE_DIR)
 
