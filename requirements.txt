@@ -6,3 +6,5 @@ python-dotenv
 transformers
 torch
 scikit-learn
+argostranslate
+hf_xet

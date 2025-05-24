@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 HF_TOKEN = os.getenv("HF_TOKEN")
 
-MODEL_NAME_DARKBERT = "s2w-ai/DarkBERT"s
+MODEL_NAME_DARKBERT = "s2w-ai/DarkBERT"
 print(f"Loading embedding model: {MODEL_NAME_DARKBERT}")
 try:
     EMBEDDING_TOKENIZER = AutoTokenizer.from_pretrained(

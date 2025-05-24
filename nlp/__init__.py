@@ -1,4 +1,4 @@
-from .translator import translate_korean_to_english, process_articles_for_translation
+from .translator import translate_boannews_with_argos
 from .embedder import get_segmented_embedding
 
 # __all__ = [
