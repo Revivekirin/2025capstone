@@ -1,6 +1,7 @@
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import torch
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 HF_TOKEN = os.getenv("HF_TOKEN")
