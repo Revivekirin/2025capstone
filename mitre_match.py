@@ -28,6 +28,7 @@ def main_workflow():
 
     # --- 4. 요약 저장 ---
     add_summaries_to_articles(news_articles)
+    save_articles_to_json(news_articles, output_path="news_data.json")
 
     # --- 5. MITRE ATT&CK 기술 정보 로드 ---
     mitre_techniques_info = load_mitre_techniques(mitre_xlsx_path)
@@ -49,6 +50,14 @@ def main_workflow():
         print(f"Results saved to {output_json_path}.")
     except Exception as e:
         print(f"Error saving results: {e}")
+
+def save_articles_to_json(news_articles, output_path="news_data.json"):
+    try:
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(news_articles, f, ensure_ascii=False, indent=4)
+        print(f"저장 완료: {output_path}")
+    except Exception as e:
+        print(f"저장 중 오류 발생: {e}")
 
 
 if __name__ == "__main__": main_workflow() 
