@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 from utils.file_loader import load_articles_from_directory, load_mitre_techniques
 from nlp.translator import translate_boannews_with_argos
+from nlp.summarize import add_summaries_to_articles
 from mitre.matcher import calculate_mire_embedding, match_articles_to_mitre
 
 load_dotenv()

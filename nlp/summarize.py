@@ -6,7 +6,7 @@ load_dotenv()
 HF_TOKEN = os.getenv("HF_TOKEN")
 
 MODEL_NAME_BART_LARGE_CNN = "facebook/bart-large-cnn"
-print(f"Loading embedding model: {MODEL_NAME_BART_LARGE_CNN T}")
+print(f"Loading embedding model: {MODEL_NAME_BART_LARGE_CNN}")
 try:
     EMBEDDING_TOKENIZER =  AutoTokenizer.from_pretrained("facebook/bart-large-cnn")
     EMBEDDING_MODEL = AutoModelForSeq2SeqLM.from_pretrained("facebook/bart-large-cnn")
