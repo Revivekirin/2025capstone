@@ -60,3 +60,27 @@ def load_articles_from_directory(base_dir):
 
     print(f"Loaded {len(news_list)} articles.")
     return news_list
+
+
+
+def load_mitre_techniques(xlsx_path):
+    print(f"Loading MITRE techniques from: {xlsx_path}")
+    try:
+        df = pd.read_excel(xlsx_path)
+        if 'ID' not in df.columns or 'name' not in df.columns:
+            if 'ID' in df.columns and 'description' in df.columns and 'name' not in df.columns:
+                print("Warning: 'name' column not found. Using 'description' as name.")
+                teqchniques = list(zip(df['ID'], df['description']))
+            else:
+                raise ValueError("MIRE ATT&CK data must contain 'ID and 'name (or 'description') columns." )
+        else:
+            techniques = list(zip(df['ID'], df['name']))
+
+        print(f"Loaded {len(techniques)} techniques.")
+        return techniques
+    except FileNotFoundError:
+        print(f"File not found: {xlsx_path}")
+        return []
+    except Exception as e:
+        print(f"Error loading {xlsx_path}: {e}")
+        return []
