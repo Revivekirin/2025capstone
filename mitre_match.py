@@ -23,7 +23,7 @@ def main_workflow():
         return
 
     # --- 3. 특정 출처 기사 번역 ---
-    processed_news = translate_boannews_with_argos(BASE_NEWS_DIR, target_source='boannews')
+    translate_boannews_with_argos(BASE_NEWS_DIR, target_source='boannews')
     news_articles = load_articles_from_directory(BASE_NEWS_DIR)
 
     # --- 4. 요약 저장 ---
@@ -51,7 +51,7 @@ def main_workflow():
     except Exception as e:
         print(f"Error saving results: {e}")
 
-def save_articles_to_json(news_articles, output_path="news_data.json"):
+def save_articles_to_json(news_articles, output_path=f"{output_json_path}"):
     try:
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(news_articles, f, ensure_ascii=False, indent=4)
