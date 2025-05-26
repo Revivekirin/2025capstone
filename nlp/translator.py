@@ -3,75 +3,7 @@ import torch
 import os
 from dotenv import load_dotenv
 import argostranslate.package
-import argostranslate.translate
 
-# def translate_boannews_with_argos(news_list, base_dir, target_source="boannews"):
-#     from_code = "ko"
-#     to_code = "en"
-
-#     installed_languages = argostranslate.translate.get_installed_languages()
-#     from_lang = next((lang for lang in installed_languages if lang.code == from_code), None)
-#     to_lang = next((lang for lang in installed_languages if lang.code == to_code), None)
-
-#     if not from_lang or not to_lang:
-#         print(f"언어 쌍 '{from_code}' → '{to_code}'를 찾을 수 없습니다. 먼저 모델을 설치하세요.")
-#         return news_list
-
-#     translator = from_lang.get_translation(to_lang)
-
-#     translated_news_list = []
-#     other_news_list = []
-
-#     print(f"Translating and saving boannews articles...")
-
-#     for i, article in enumerate(news_list):
-#         if article.get('source') != target_source:
-#             other_news_list.append(article)
-#             continue
-
-#         title_to_translate = article.get('title', '')
-#         content_to_translate = article.get('content', '')
-
-#         if not title_to_translate.strip() and not content_to_translate.strip():
-#             print(f"  Skipping empty article {i+1}/{len(news_list)}")
-#             other_news_list.append(article)
-#             continue
-
-#         try:
-#             translated_title = translator.translate(title_to_translate) if title_to_translate else ''
-#             translated_content = translator.translate(content_to_translate) if content_to_translate else ''
-
-#             # 파일 경로 추정
-#             rel_path = os.path.join(article['source'], translated_title[:20].replace(" ", "_").replace("/", "_"))
-#             target_folder = os.path.join(base_dir, rel_path)
-#             article_path = os.path.join(target_folder, "article.txt")
-
-#             os.makedirs(target_folder, exist_ok=True)
-
-#             with open(article_path, "w", encoding="utf-8") as f:
-#                 f.write(f"제목: {translated_title}\n\n")
-#                 f.write("URL: \n\n")
-#                 f.write(translated_content.strip())
-
-#             translated_article = article.copy()
-#             translated_article.update({
-#                 'title': translated_title,
-#                 'content': translated_content,
-#                 'translated': True,
-#                 'path': article_path
-#             })
-
-#             translated_news_list.append(translated_article)
-#             print(f"  [✔] Translated & saved: {article_path}")
-
-#         except Exception as e:
-#             print(f"  [!] Failed to translate article {i+1}/{len(news_list)}: {e}")
-#             other_news_list.append(article)
-
-#     print(f"\nTranslation process completed. {len(translated_news_list)} articles translated and saved.")
-#     return other_news_list + translated_news_list
-
-import os
 import glob
 from argostranslate import translate
 
