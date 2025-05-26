@@ -6,6 +6,7 @@ import requests
 from datetime import datetime, timedelta
 import logging
 import re 
+from glob import glob
 
 # --- 설정 값 ---
 BASE_DOWNLOAD_DIR = Path("/app/downloads") # 기본 다운로드 디렉토리
@@ -21,9 +22,33 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/115
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+
+def clean_old_group_files(group, today_str):
+    """해당 그룹 폴더에서 오늘 날짜가 아닌 HTML 파일 삭제"""
+    group_dir = BASE_DOWNLOAD_DIR / group
+    if not group_dir.exists():
+        return
+    
+    logger.info(f"[정리] '{group}' 그룹 디렉토리 내 오래된 파일 삭제 중...")
+    for file_path in group_dir.glob(f"{group}_*.html"):
+        if today_str not in file_path.name:
+            try:
+                file_path.unlink()
+                logger.info(f"🗑️ 삭제됨: {file_path}")
+            except Exception as e:
+                logger.warning(f"삭제 실패: {file_path} | 이유: {e}")
+
+
 def sanitize_filename(filename_component):
     """파일명으로 사용하기 안전한 문자열로 변환"""
     return re.sub(r'[^\w\-_\.]', '_', str(filename_component))
+
+
+def get_normalized_group_name(entry):
+    """entry에서 group을 안전하게 정규화하여 반환"""
+    raw_group = entry.get("group", "").strip().lower()
+    return sanitize_filename(raw_group if raw_group else "unknown_group")
+
 
 def wait_for_tor_proxy_ready(max_retries=10, delay_sec=10):
     logger.info("Tor 프록시 준비 상태 확인 시작...")
@@ -64,38 +89,40 @@ def fetch_url_with_curl(url, output_filepath):
         output_filepath.parent.mkdir(parents=True, exist_ok=True)
         
         process = subprocess.run(curl_cmd, check=True, capture_output=True, text=True, timeout=SUBPROCESS_TIMEOUT)
-        logger.info(f"✅ 저장됨: {output_filepath}")
+        logger.info(f"저장됨: {output_filepath}")
         return True
     except subprocess.CalledProcessError as e:
-        logger.error(f"❌ 페이지 없음 또는 curl 실패 (종료 코드 {e.returncode}): {url}")
+        logger.error(f"페이지 없음 또는 curl 실패 (종료 코드 {e.returncode}): {url}")
         logger.debug(f"Curl stdout: {e.stdout}")
         logger.debug(f"Curl stderr: {e.stderr}")
         return False
     except subprocess.TimeoutExpired:
-        logger.error(f"❌ Curl 실행 시간 초과: {url}")
+        logger.error(f"Curl 실행 시간 초과: {url}")
         return False
     except Exception as e:
-        logger.error(f"❌ 알 수 없는 오류 발생 ({url}): {e}")
+        logger.error(f"알 수 없는 오류 발생 ({url}): {e}")
         return False
+
+
 
 def run_crawler():
     if not ONION_LIST_PATH.exists() or ONION_LIST_PATH.stat().st_size == 0:
-        logger.error(f"❌ {ONION_LIST_PATH} 파일이 없거나 비어있습니다. 종료합니다.")
+        logger.error(f"{ONION_LIST_PATH} 파일이 없거나 비어있습니다. 종료합니다.")
         return
 
     try:
         with open(ONION_LIST_PATH, "r") as f:
             fqdn_list = json.load(f)
     except json.JSONDecodeError:
-        logger.error(f"❌ {ONION_LIST_PATH} 파일의 JSON 형식이 잘못되었습니다. 종료합니다.")
+        logger.error(f"{ONION_LIST_PATH} 파일의 JSON 형식이 잘못되었습니다. 종료합니다.")
         return
     except Exception as e:
-        logger.error(f"❌ {ONION_LIST_PATH} 파일 로드 중 오류 발생: {e}. 종료합니다.")
+        logger.error(f"{ONION_LIST_PATH} 파일 로드 중 오류 발생: {e}. 종료합니다.")
         return
 
 
     if not fqdn_list:
-        logger.error("❌ FQDN 리스트가 비어있습니다. 종료합니다.")
+        logger.error("FQDN 리스트가 비어있습니다. 종료합니다.")
         return
 
     today_str = datetime.now().strftime("%Y%m%d")
@@ -104,12 +131,14 @@ def run_crawler():
     special_groups = ["play", "blacksuit", "kairos"] # 페이지네이션 방식이 다른 그룹
 
     total_fqdns = len(fqdn_list)
+
+    all_groups = set(get_normalized_group_name(entry) for entry in fqdn_list)
+    for group in all_groups:
+        clean_old_group_files(group, today_str)
+
     for i, entry in enumerate(fqdn_list):
         fqdn = entry.get("fqdn")
-        # group 필드가 없거나, 있어도 빈 문자열일 경우 "unknown" 등으로 기본값 설정 가능
-        raw_group = entry.get("group", "unknown_group").lower().strip()
-        group = sanitize_filename(raw_group if raw_group else "unknown_group")
-
+        group = get_normalized_group_name(entry)
 
         if not fqdn:
             logger.warning(f"FQDN 정보가 없는 항목 건너뜀: {entry}")

@@ -98,7 +98,7 @@ const getTodayString = () => {
         console.log(`⚠️ [${categoryName}] ${pageNum} 페이지에서 오늘 날짜 기사 없음`);
         await page.close();
         pageNum++;
-        if (pageNum > 10) break; // 최대 페이지 순회 제한
+        if (pageNum > 3) break; // 최대 페이지 순회 제한
         continue;
       }
 
