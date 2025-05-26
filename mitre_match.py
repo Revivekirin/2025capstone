@@ -43,13 +43,24 @@ def main_workflow():
             final_articles_with_mitre = match_articles_to_mitre(news_articles, mitre_embeddings_array, valid_mitre_techniques)
     
     # --- 7. 결과 저장 ---
-    print(f"Saving results to {output_json_path}...")
-    try:
-        with open(output_json_path, 'w', encoding='utf-8') as json_file:
-            json.dump(final_articles_with_mitre if 'final_articles_with_mitre' in locals() else processed_news_list, json_file, ensure_ascii=False, indent=4, default=str)
-        print(f"Results saved to {output_json_path}.")
-    except Exception as e:
-        print(f"Error saving results: {e}")
+    existing_data = []
+    if os.path.exists(output_json_path):
+        with open(output_json_path, 'r', encoding='utf-8') as f:
+            existing_data = json.load(f)
+
+    # 새 데이터 병합
+    merged_data = existing_data + (final_articles_with_mitre if 'final_articles_with_mitre' in locals() else news_articles)
+
+    # 병합 결과 저장
+    with open(output_json_path, 'w', encoding='utf-8') as f:
+        json.dump(merged_data, f, ensure_ascii=False, indent=4)
+    # print(f"Saving results to {output_json_path}...")
+    # try:
+    #     with open(output_json_path, 'w', encoding='utf-8') as json_file:
+    #         json.dump(final_articles_with_mitre if 'final_articles_with_mitre' in locals() else processed_news_list, json_file, ensure_ascii=False, indent=4, default=str)
+    #     print(f"Results saved to {output_json_path}.")
+    # except Exception as e:
+    #     print(f"Error saving results: {e}")
 
 def save_articles_to_json(news_articles, output_path=f"{output_json_path}"):
     try:
