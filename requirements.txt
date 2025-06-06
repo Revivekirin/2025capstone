@@ -8,3 +8,4 @@ torch
 scikit-learn
 argostranslate
 hf_xet
+sentence_transformers

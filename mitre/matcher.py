@@ -1,6 +1,7 @@
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from nlp.embedder import get_segmented_embedding
+from nlp.embedder_st import get_embedding_st
 
 def calculate_mire_embedding(techniques_with_names):
     print("Calculating MIRE embedding...")
@@ -8,7 +9,7 @@ def calculate_mire_embedding(techniques_with_names):
     valid_techniques = []
 
     for tid, name_or_desc in techniques_with_names:
-        embedding = get_segmented_embedding(name_or_desc)
+        embedding = get_embedding_st(name_or_desc)
         if embedding is not None:
             mitre_embeddings_list.append(embedding)
             valid_techniques.append((tid, name_or_desc))
@@ -34,7 +35,7 @@ def match_articles_to_mitre(articles_list, mitre_embeddings_array, techniques_in
     for i, article in enumerate(articles_list):
         print(f"Processing article {i+1}/{len(articles_list)}: {article['title']}")
 
-        article_content_embedding = get_segmented_embedding(article["content"])
+        article_content_embedding = get_embedding_st(article["content"])
         if article_content_embedding is None:
             print(f"Warning: No embedding found for article {i+1}: {article['title']}.")
             article['mitre_match'] = None
