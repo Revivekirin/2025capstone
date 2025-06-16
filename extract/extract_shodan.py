@@ -103,9 +103,14 @@ def enrich_ips_with_shodan_data(csv_filepath: str, api_key: str):
         if pd.isna(shodan_ip) or shodan_ip == "NO_IP_FOUND":
             continue
 
-        product_val = row.get('asn') 
-        if pd.isna(product_val) or str(product_val).strip() == "" or str(product_val).lower() == 'nan': # Check for NaN, None, empty string
-            print(f"IP: {shodan_ip} - 'asn' 비어있음. Shodan 조회 시도...")
+        shodan_check_columns = ["asn", "product", "vulns", "ssl_fingerprint"]
+        is_all_empty = all(
+            pd.isna(row.get(col)) or str(row.get(col)).strip() == "" or str(row.get(col)).lower() == 'nan'
+            for col in shodan_check_columns
+        )
+        if not is_all_empty:
+            continue  
+
         try:
             shodan_ip_str = str(shodan_ip)
             cmd = f'curl -s "https://api.shodan.io/shodan/host/{shodan_ip_str}?key={api_key}"'
