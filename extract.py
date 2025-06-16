@@ -8,6 +8,7 @@ from extract.merge_csv import merge_and_update_shodan_csv
 from extract.extract_url import process_html_files_and_extract_urls
 from extract.extract_shodan import enrich_ips_with_shodan_data
 from extract.extract_cvedb import update_cvedb_from_shodan, match_cves_to_mitre
+from extract.extract_geolocation import add_coordinates_to_shodan_data
 
 load_dotenv()
 BASE_NEWS_DIR = os.getenv("BASE_NEWS_DIR") 
@@ -84,9 +85,9 @@ def run():
             df.to_csv(shodan_data_csv_file, index=False)
             print(f"'cve_list' 열을 추가한 파일이 저장되었습니다: {shodan_data_csv_file}")
         except Exception as e:
-            print(f"오류: cve_list 생성 중 예외 발생: {e}")
+            print(f"[오류]: cve_list 생성 중 예외 발생: {e}")
     else:
-        print(f"오류: '{shodan_data_csv_file}' 파일이 존재하지 않아 cve_list를 생성할 수 없습니다.")
+        print(f"[오류]: '{shodan_data_csv_file}' 파일이 존재하지 않아 cve_list를 생성할 수 없습니다.")
 
     print("\n모든 작업 완료.")
 
@@ -96,6 +97,14 @@ def run():
     print("\n--- 6. CVE Summary 기반 MITRE TTP 매핑 ---")
     match_cves_to_mitre(CVEDB_PATH, MITRE_XLSX_PATH)
 
+    print("\n--- 7. Shodan 데이터에 위도/경도 좌표 추가 ---")
+    if shodan_data_csv_file.exists():
+        try:
+            add_coordinates_to_shodan_data(str(shodan_data_csv_file), save=True, sleep_sec=1)
+        except Exception as e:
+            print(f"[오류] 좌표 추가 중 예외 발생: {e}")
+    else:
+        print(f"[오류] '{shodan_data_csv_file}' 파일이 존재하지 않아 좌표를 추가할 수 없습니다.")
 
 
 

@@ -86,7 +86,7 @@ def update_cvedb_from_shodan(shodan_data_path, output_dir_path):
 def match_cves_to_mitre(cvedb_csv_path, mitre_excel_path):
     df_cvedb = pd.read_csv(cvedb_csv_path)
 
-    if 'mitre_matches' in df_cvedb.columns and df_cvedb['mitre_matches'].notna().all():
+    if 'mitre_match' in df_cvedb.columns and df_cvedb['mitre_match'].notna().all():
         print("모든 항목에 이미 mitre_matches가 존재합니다. 매핑을 건너뜁니다.")
         return
 
@@ -117,7 +117,9 @@ def match_cves_to_mitre(cvedb_csv_path, mitre_excel_path):
         similarities = cosine_similarity([emb], mitre_embeddings_array)[0]
         best_idx = np.argmax(similarities)
 
-        matched_id, matched_name = valid_techniques[best_idx]
+        matched_id, _= valid_techniques[best_idx]
+        matched_name = mitre_df.iloc[best_idx]['name']
+
         match_score = float(similarities[best_idx])
 
         mitre_results[cve_id] = {
