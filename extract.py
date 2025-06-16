@@ -7,13 +7,15 @@ import ast
 from extract.merge_csv import merge_and_update_shodan_csv
 from extract.extract_url import process_html_files_and_extract_urls
 from extract.extract_shodan import enrich_ips_with_shodan_data
-from extract.extract_cvedb import update_cvedb_from_shodan
+from extract.extract_cvedb import update_cvedb_from_shodan, match_cves_to_mitre
 
 load_dotenv()
 BASE_NEWS_DIR = os.getenv("BASE_NEWS_DIR") 
 OUTPUT_DIR = os.getenv("OUTPUT_DIR")
 ONION_JSON_PATH = os.getenv("ONION_JSON_PATH") 
 SHODAN_API_KEY = os.getenv("SHODAN_API_KEY")
+MITRE_XLSX_PATH = os.getenv("MITRE_XLSX_PATH")
+CVEDB_PATH = os.getenv("CVEDB_PATH") 
 
 def run():
     if not BASE_NEWS_DIR:
@@ -89,7 +91,11 @@ def run():
     print("\n모든 작업 완료.")
 
     print("\n--- 5. CVE DB 정보 보강 단계 ---")
-    update_cvedb_from_shodan(str(shodan_data_csv_file), OUTPUT_DIR)
+    update_cvedb_from_shodan(str(shodan_data_csv_file), CVEDB_PATH)
+
+    print("\n--- 6. CVE Summary 기반 MITRE TTP 매핑 ---")
+    match_cves_to_mitre(CVEDB_PATH, MITRE_XLSX_PATH)
+
 
 
 

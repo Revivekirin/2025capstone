@@ -1,9 +1,15 @@
 import pandas as pd
 import requests
+import numpy as np
 import time
 import ast
 from tqdm import tqdm
 from pathlib import Path
+from sklearn.metrics.pairwise import cosine_similarity
+
+from mitre.matcher import calculate_mire_embedding
+from nlp.embedder_st import get_embedding_st
+
 
 def parse_cve_list(val):
     try:
@@ -48,7 +54,7 @@ def get_cvedb_details_shodan(cve_id):
     return {"cve_id": cve_id, "error": "No response"}
 
 def update_cvedb_from_shodan(shodan_data_path, output_dir_path):
-    cvedb_path = Path(output_dir_path) / "cvedb_shodan.csv"
+    cvedb_path = Path(output_dir_path)
     existing_cvedb_df = pd.DataFrame()
 
     if cvedb_path.exists():
@@ -76,3 +82,50 @@ def update_cvedb_from_shodan(shodan_data_path, output_dir_path):
         print(f"[완료] cvedb_shodan.csv에 {len(results)}개 CVE 정보가 추가되었습니다.")
     else:
         print("새로 수집할 CVE 정보가 없습니다.")
+
+def match_cves_to_mitre(cvedb_csv_path, mitre_excel_path):
+    df_cvedb = pd.read_csv(cvedb_csv_path)
+
+    if 'mitre_matches' in df_cvedb.columns and df_cvedb['mitre_matches'].notna().all():
+        print("모든 항목에 이미 mitre_matches가 존재합니다. 매핑을 건너뜁니다.")
+        return
+
+    mitre_df = pd.read_excel(mitre_excel_path)
+    techniques = list(zip(mitre_df['ID'], mitre_df['description'].fillna("")))
+
+    mitre_embeddings_array, valid_techniques = calculate_mire_embedding(techniques)
+    if mitre_embeddings_array is None:
+        print("No valid MIRE embeddings found. Skipping.")
+        return
+
+    cve_summaries = df_cvedb[['cve_id', 'summary']].fillna("").to_dict(orient='records')
+    mitre_results = {}
+
+    for entry in tqdm(cve_summaries):
+        cve_id = entry['cve_id']
+        content = entry['summary']
+
+        if not content.strip():
+            mitre_results[cve_id] = None
+            continue
+
+        emb = get_embedding_st(content)
+        if emb is None:
+            mitre_results[cve_id] = None
+            continue
+
+        similarities = cosine_similarity([emb], mitre_embeddings_array)[0]
+        best_idx = np.argmax(similarities)
+
+        matched_id, matched_name = valid_techniques[best_idx]
+        match_score = float(similarities[best_idx])
+
+        mitre_results[cve_id] = {
+            "id": matched_id,
+            "name": matched_name,
+            "score": match_score,
+        }
+
+    df_cvedb['mitre_match'] = df_cvedb['cve_id'].apply(lambda x: mitre_results.get(x))
+    df_cvedb.to_csv(cvedb_csv_path, index=False)
+    print(f"MITRE 매핑 결과가 열로 추가되어 저장되었습니다: {cvedb_csv_path}")
