@@ -10,3 +10,5 @@ argostranslate
 hf_xet
 sentence_transformers
 geopy
+streamlit
+google-generativeai
