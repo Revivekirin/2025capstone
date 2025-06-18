@@ -8,7 +8,7 @@ A Dockerized web crawler for security intelligence – supporting news, dark web
 
 ✅ **Tested on:** macOS with M2 chip
 ⚠️ You should fill up you own .env file 
-- 
+-
 
 ---
 
