@@ -14,7 +14,7 @@ import json
 from google import genai
 from dotenv import load_dotenv
 
-# ----------------- 경로 설정 -----------------
+# ----------------- 경로 설정 ------------------------
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 shodan_data_path = os.path.join(project_root, "data", "shodan", "shodan_data.csv")
 cve_db_path = os.path.join(project_root, "data", "shodan", "cvedb_shodan.csv")
@@ -63,7 +63,44 @@ def load_data():
 
 # ----------------- Streamlit 사이드바 -----------------
 st.sidebar.title("대시보드 메뉴")
-menu_option = st.sidebar.radio("이동할 화면을 선택하세요", ("그룹 기반 분석", "클러스터 기반 분석"))
+
+# 세션 상태 초기화
+if "menu_option" not in st.session_state:
+    st.session_state.menu_option = "그룹 기반 분석"
+
+# 버튼 스타일 공통 적용 (가로 폭 100%, 높이 40px 등)
+button_style = """
+<style>
+.sidebar-button {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 8px;
+    background-color: #f0f2f6;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.sidebar-button:hover {
+    background-color: #e0e0e0;
+}
+</style>
+"""
+
+# 삽입
+st.markdown(button_style, unsafe_allow_html=True)
+
+# 버튼 UI 구현
+if st.sidebar.button("그룹 기반 분석", key="btn_group"):
+    st.session_state.menu_option = "그룹 기반 분석"
+if st.sidebar.button("클러스터 기반 분석", key="btn_cluster"):
+    st.session_state.menu_option = "클러스터 기반 분석"
+
+# 현재 선택된 메뉴
+menu_option = st.session_state.menu_option
+
 
 # ----------------- 데이터 로딩 -----------------
 df_shodan, df_cvedb, mitre_df = load_data()
