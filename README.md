@@ -1,6 +1,8 @@
 # 🕷️ Playwright Crawler Dashboard
 
-![project-logo](./logo/1.gif)
+<div align="center">
+  <img src="./logo/1.gif" alt="project-logo" width="300"/>
+</div>
 
 A Dockerized web crawler for security intelligence – supporting news, dark web leaks, and MITRE ATT\&CK mapping.
 
