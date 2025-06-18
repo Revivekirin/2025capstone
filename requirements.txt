@@ -12,3 +12,5 @@ sentence_transformers
 geopy
 streamlit
 google-generativeai
+pydeck
+plotly
