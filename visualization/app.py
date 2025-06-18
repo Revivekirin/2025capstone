@@ -149,127 +149,86 @@ if menu_option == "그룹 기반 분석":
 
 # ----------------- 클러스터 기반 분석 -----------------
 else:
-    st.title("Shodan 기반 위협 분석 - 클러스터 기반")
+    st.title("Shodan 기반 위협 분석 - 그룹 단위 TTP 분석")
 
-    tech_pivot = (
-        df_shodan.explode('cve_list')
-        .merge(df_cvedb[['cve_id', 'technique_id']], left_on='cve_list', right_on='cve_id')
-        .groupby(['group', 'technique_id']).size()
-        .unstack(fill_value=0)
-    )
-    scaler = StandardScaler()
-    tech_scaled = scaler.fit_transform(tech_pivot)
+    group_list = sorted(df_shodan['group'].unique())
+    selected_groups = st.multiselect("분석할 그룹 선택", group_list, default=group_list)
 
-    distortions, silhouette_scores = [], []
-    best_k, best_score = 2, -1
-    K = range(2, min(11, len(tech_pivot)))
-    for k in K:
-        kmeans_model = KMeans(n_clusters=k, random_state=42).fit(tech_scaled)
-        distortions.append(kmeans_model.inertia_)
-        score = silhouette_score(tech_scaled, kmeans_model.labels_)
-        silhouette_scores.append(score)
-        if score > best_score:
-            best_score, best_k = score, k
-
-    if st.sidebar.checkbox("Elbow 차트 보기"):
-        st.plotly_chart(px.line(x=list(K), y=distortions, markers=True, title="Elbow Curve"))
-        st.plotly_chart(px.line(x=list(K), y=silhouette_scores, markers=True, title="Silhouette Score"))
-
-    st.sidebar.markdown(f"**자동 선택된 클러스터 수: {best_k}**")
-    kmeans = KMeans(n_clusters=best_k, random_state=42)
-    cluster_labels = kmeans.fit_predict(tech_scaled)
-    tech_pivot['cluster'] = cluster_labels
-
-    reducer = umap.UMAP(random_state=42)
-    embedding = reducer.fit_transform(tech_scaled)
-    tech_pivot['umap_x'] = embedding[:, 0]
-    tech_pivot['umap_y'] = embedding[:, 1]
-
-    # Index를 컬럼으로 복원
-    tech_pivot_reset = tech_pivot.reset_index()
-
-    st.subheader("클러스터별 그룹 위치 (UMAP 시각화)")
-    fig_umap = px.scatter(
-        tech_pivot_reset,
-        x='umap_x',
-        y='umap_y',
-        color='cluster',
-        hover_data=['group'],
-
-    )
-    st.plotly_chart(fig_umap)
-
-
-    df_shodan_clustered = df_shodan.merge(tech_pivot[['cluster']].reset_index(), on='group', how='left')
-    selected_clusters = st.multiselect("분석할 클러스터 선택",
-                                        sorted(df_shodan_clustered['cluster'].dropna().unique()),
-                                        default=sorted(df_shodan_clustered['cluster'].dropna().unique()))
-
-    # st.subheader("클러스터별 그룹 목록")
-    # all_group_counts = df_shodan_clustered[df_shodan_clustered['cluster'].isin(selected_clusters)]
-    # st.dataframe(all_group_counts.groupby(['group', 'cluster']).size().reset_index(name='server_count'))
-
-    st.subheader("클러스터별 Technique 분포")
-    df_exploded = df_shodan_clustered[df_shodan_clustered['cluster'].isin(selected_clusters)].explode('cve_list')
-    merged = df_exploded.merge(df_cvedb[['cve_id', 'technique_id']], left_on='cve_list', right_on='cve_id')
+    df_filtered = df_shodan[df_shodan['group'].isin(selected_groups)].explode('cve_list')
+    merged = df_filtered.merge(df_cvedb[['cve_id', 'technique_id']], left_on='cve_list', right_on='cve_id')
     merged = merged.merge(mitre_df[['technique_id', 'technique_name', 'description']], on='technique_id', how='left')
-    tech_count = merged.groupby(['cluster', 'technique_id', 'technique_name', 'description']).size().reset_index(name='count')
-    fig_tech = px.bar(tech_count, x='technique_id', y='count', color='cluster', facet_col='cluster', hover_data=['technique_name'])
-    st.plotly_chart(fig_tech, use_container_width=True)
 
-    st.subheader("클러스터별 TTP 설명 요약 (Gemini AI)")
+    # 그룹별 주요 TTP 요약
+    st.subheader("그룹별 주요 TTP 설명 요약 (Gemini AI)")
 
-    top_ttps = tech_count.groupby('cluster').apply(lambda d: d.sort_values('count', ascending=False).head(5)).reset_index(drop=True)
+    top_ttps = merged.groupby(['group', 'technique_id', 'technique_name', 'description']).size().reset_index(name='count')
+    top_ttps = top_ttps.groupby('group').apply(lambda d: d.sort_values('count', ascending=False).head(5)).reset_index(drop=True)
 
-    for clus in sorted(top_ttps['cluster'].unique()):
-        st.markdown(f"### 🔹 클러스터 {clus}")
-        top_df = top_ttps[top_ttps['cluster'] == clus]
+    for group in selected_groups:
+        st.markdown(f"### 🔹 그룹: {group}")
+        top_df = top_ttps[top_ttps['group'] == group]
 
-        # TTP 설명 하나로 합치기
+        # 설명 합치기
         description_text = ". ".join(
             f"{row['technique_name']} ({row['technique_id']}): {row['description']}" for _, row in top_df.iterrows()
         )
 
-        # 프롬프트 구성
+        # 프롬프트
         prompt = f"""
-    아래는 사이버 공격 클러스터 {clus}에서 자주 나타나는 MITRE ATT&CK TTP 설명입니다:
+    다음은 공격 그룹 '{group}'에서 자주 나타나는 MITRE ATT&CK 기술(TTP) 설명입니다:
 
     {description_text}
 
-    이 클러스터의 위협 행위 특성과 관련 랜섬웨어 그룹의 공격 전략을 기반으로 다음을 요약해 주세요:
-    - 어떤 공격 유형이 포함되는가 (초기 침입, lateral movement 등)
-    - 특징적인 TTP 조합이 의미하는 위협 유형
-    - 관련 랜섬웨어 그룹 사례 예시가 있다면
+    이 그룹의 전반적인 공격 특성과 전략을 다음과 같이 요약해 주세요:
+    - 주요 공격 단계 (예: 초기 침입, lateral movement 등)
+    - 위협 시나리오의 일반적 특징
+    - 관련 랜섬웨어 그룹이 있다면 예시 제시
 
-    요약으로 제시해 주세요.
+    5줄 이내로 간결히 정리해 주세요.
         """
 
-        if st.button(f"Gemini로 요약 생성하기 - 클러스터 {clus}", key=f"gemini_btn_{clus}"):
-            with st.spinner("Gemini 모델로 요약 생성 중..."):
+        if st.button(f"Gemini 요약 생성 - {group}", key=f"gemini_btn_{group}"):
+            with st.spinner("Gemini로 요약 생성 중..."):
                 try:
                     summary = summarize_with_gemini(prompt)
                     st.success("요약 완료")
                     st.markdown(f"**LLM 분석 결과:**\n\n{summary}")
                 except Exception as e:
-                    st.error(f"Gemini API 호출 실패: {e}")
-                    st.markdown("### Fallback: TTP 설명 요약 (수동 출력)")
+                    st.error(f"Gemini 호출 실패: {e}")
+                    st.markdown("### Fallback 요약")
                     for _, row in top_df.iterrows():
                         st.markdown(f"- **{row['technique_name']} ({row['technique_id']})**: {row['description']}")
 
-    
-    st.subheader("클러스터별 Top TTP 레이다 차트")
+
+
+
+#------ 클러스터별 TTP 분석 레이다 차트 ------
+    # 1. 그룹별 TTP count 계산
+    tech_count = merged.groupby(['group', 'technique_id', 'technique_name', 'description']) \
+                    .size().reset_index(name='count')
+
+    # 2. Top TTP 선정
     top_ttp_ids = tech_count.groupby('technique_id')['count'].sum().nlargest(8).index.tolist()
-    pivot_radar = tech_count[tech_count['technique_id'].isin(top_ttp_ids)].pivot(index='cluster', columns='technique_id', values='count').fillna(0)
+
+    # 3. 피벗 테이블: group vs TTP
+    pivot_radar = tech_count[
+        tech_count['technique_id'].isin(top_ttp_ids)
+    ].pivot(index='group', columns='technique_id', values='count').fillna(0)
+
+    # 4. 레이다 차트 시각화
     fig_radar = go.Figure()
-    for cluster in pivot_radar.index:
+    for group in pivot_radar.index:
         fig_radar.add_trace(go.Scatterpolar(
-            r=pivot_radar.loc[cluster].values,
+            r=pivot_radar.loc[group].values,
             theta=top_ttp_ids,
             fill='toself',
-            name=f'Cluster {cluster}'
+            name=f'Group: {group}'
         ))
-    fig_radar.update_layout(polar=dict(radialaxis=dict(visible=True)), title="Radar Chart of TTPs")
+
+    fig_radar.update_layout(
+        polar=dict(radialaxis=dict(visible=True, showticklabels=True)),
+        title="Radar Chart of Top TTPs per Group"
+    )
     st.plotly_chart(fig_radar)
 
-    with st.expander("전체 TTP 설명 테이블"):
-        st.dataframe(mitre_df[['technique_id', 'technique_name', 'description']].drop_duplicates().sort_values('technique_id'))
+

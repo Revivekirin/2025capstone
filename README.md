@@ -7,7 +7,8 @@
 A Dockerized web crawler for security intelligence – supporting news, dark web leaks, and MITRE ATT\&CK mapping.
 
 ✅ **Tested on:** macOS with M2 chip
-⚠️ If you encounter issues on a different OS, feel free to message me on KakaoTalk.
+⚠️ You should fill up you own .env file 
+- 
 
 ---
 
@@ -21,7 +22,7 @@ chmod +x ./scripts/init.sh
 
 ---
 
-## 🌐 Dark Web Crawling
+## Dark Web Crawling
 
 ```bash
 # Crawl onion sites through Tor proxy
@@ -31,7 +32,7 @@ chmod +x ./scripts/run_compose.sh
 
 ---
 
-## 🧠 Dark Web Info Extraction & MITRE Matching
+## Dark Web Info Extraction & MITRE Matching
 
 ```bash
 # Extract leaked info, match CVEs to MITRE ATT&CK
@@ -41,7 +42,7 @@ chmod +x ./scripts/run_extract.sh
 
 ---
 
-## 📰 News Crawling (Open Web)
+## News Crawling (Open Web)
 
 ```bash
 # Run Node.js-based crawler
@@ -58,7 +59,7 @@ chmod +x ./scripts/run_playwright.sh
 
 ---
 
-## 📈 Visualization & Streamlit Dashboard
+## Visualization & Streamlit Dashboard
 
 ```bash
 cd ./visualization
