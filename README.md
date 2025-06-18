@@ -1,31 +1,102 @@
-# Playwright Crawler
+# 🕷️ Playwright Crawler Dashboard
 
-This is a simple Playwright-based web crawler wrapped in Docker.
+![project-logo](./logo/1.gif)
 
-✅ **Tested on:** macOS with M2 chip  
+A Dockerized web crawler for security intelligence – supporting news, dark web leaks, and MITRE ATT\&CK mapping.
+
+✅ **Tested on:** macOS with M2 chip
 ⚠️ If you encounter issues on a different OS, feel free to message me on KakaoTalk.
 
-## 🚀 Getting Started
+---
 
-After launching **Docker Desktop**, run the following commands in your terminal:
+## 🛠️ Initialization
 
 ```bash
-# Crawling: gbhackers, security_affairs, thehackernews, securityweek, boannews, ransomewatch
-chmod +x run_playwright.sh
-./scripts/run_playwright.sh
-
-# Crawling: bleeping_computer
-chmod +x run_node.sh
-./scripts/run_node.sh
-
-# crawl darkweb .html from proxy server
-chmod +x run_compose.sh
-./scripts/run_compose.sh
-
+# Run once before crawling
+chmod +x ./scripts/init.sh
+./scripts/init.sh
 ```
 
-KEYWORD should be the name of a ransomware group (e.g., `babuk`, `lockbit`, etc.)
+---
 
-The crawler will save the results as `.txt` and `.png` files in the following path:
+## 🌐 Dark Web Crawling
 
-`/app/downloads`
+```bash
+# Crawl onion sites through Tor proxy
+chmod +x ./scripts/run_compose.sh
+./scripts/run_compose.sh
+```
+
+---
+
+## 🧠 Dark Web Info Extraction & MITRE Matching
+
+```bash
+# Extract leaked info, match CVEs to MITRE ATT&CK
+chmod +x ./scripts/run_extract.sh
+./scripts/run_extract.sh
+```
+
+---
+
+## 📰 News Crawling (Open Web)
+
+```bash
+# Run Node.js-based crawler
+chmod +x ./scripts/run_node.sh
+./scripts/run_node.sh
+
+# Run Playwright-based crawler
+chmod +x ./scripts/run_playwright.sh
+./scripts/run_playwright.sh
+```
+
+> **Supported sources**:
+> `gbhackers`, `security_affairs`, `thehackernews`, `securityweek`, `boannews`, `ransomwatch`
+
+---
+
+## 📈 Visualization & Streamlit Dashboard
+
+```bash
+cd ./visualization
+streamlit run app.py
+```
+
+> You can explore:
+>
+> * Threat group clustering
+> * CVE & MITRE TTP mapping
+> * Darkweb activity summaries
+> * Gemini-based LLM summaries
+
+---
+
+## 📂 Output Directory
+
+All `.txt` and `.png` output files will be saved under:
+
+```
+/app/downloads
+```
+
+---
+
+## 🔑 Keyword-Based Crawling
+
+> You can specify ransomware group names (e.g., `lockbit`, `alphv`, `babuk`)
+> as **KEYWORDS** in your crawling config files.
+
+---
+
+## 🧩 Stack
+
+* ✅ Playwright + Node.js + Python
+* 🔐 Tor Proxy for .onion access
+* 📄 MITRE ATT\&CK enrichment
+* 🤖 Google Gemini LLM summarization
+* 🖼️ Streamlit for interactive dashboard
+
+---
+
+Feel free to contribute, open issues, or customize it for your threat intel needs!
