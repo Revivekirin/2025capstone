@@ -132,7 +132,7 @@ df_shodan['tooltip_info'] = df_shodan.apply(
 if menu_option == "그룹 기반 분석":
     st.title("Shodan 기반 위협 분석 - 그룹별 시각화")
 
-    group_list = sorted(df_shodan['group'].unique())
+    group_list = sorted(df_shodan['group'].dropna().unique())
     selected_group = st.selectbox("분석할 그룹 선택", group_list)
     group_df = df_shodan[df_shodan['group'] == selected_group]
     group_cves = sum(group_df['cve_list'], [])
