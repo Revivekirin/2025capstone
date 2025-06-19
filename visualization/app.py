@@ -1,20 +1,40 @@
 import streamlit as st
-import pandas as pd
-import os
+
+# 다크웹 분석 분위기에 어울리는 폰트 적용
+font_css = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+html, body, [class*="css"] {
+    font-family: 'Share Tech Mono', monospace !important;
+    color: #EAEAEA !important;
+    background-color: #0E1117 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Share Tech Mono', monospace !important;
+    color: #00ffcc !important;
+}
+</style>
+"""
+st.markdown(font_css, unsafe_allow_html=True)
 import ast
-from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
+import json
+import os
+
+import numpy as np
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import pydeck as pdk
-import umap.umap_ as umap
 import requests
-import json
-from google import genai
-from dotenv import load_dotenv
-import numpy as np
 import streamlit.components.v1 as components
+import umap.umap_ as umap
+from dotenv import load_dotenv
+from google import genai
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+from sklearn.preprocessing import StandardScaler
 
 # ----------------- 경로 설정 ------------------------
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
